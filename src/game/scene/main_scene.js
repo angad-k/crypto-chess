@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { Camera } from "three";
 
 extend({ OrbitControls });
 
@@ -31,7 +32,6 @@ function Box(props) {
 						? "black"
 						: "white"
 				}
-				pixelRatio={2.0}
 			/>
 		</mesh>
 	);
@@ -51,7 +51,10 @@ const CameraControls = () => {
 
 const Chess = () => {
 	return (
-		<Canvas pixelRatio={window.devicePixelRatio}>
+		<Canvas
+			gl={{ antialias: true }}
+			dpr={Math.max(window.devicePixelRatio, 2)}
+		>
 			<CameraControls />
 			<ambientLight />
 			<pointLight position={[10, 10, 10]} />
