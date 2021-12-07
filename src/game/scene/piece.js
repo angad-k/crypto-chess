@@ -62,7 +62,7 @@ const getOffset = (model) => {
 		case Models.KNIGHT:
 			return {
 				x: -0.38,
-				y: 0.4,
+				y: 0.45,
 			};
 	}
 };
@@ -87,7 +87,6 @@ const getScale = (model) => {
 const Piece = (props) => {
 	const [hovered, setHover] = useState(false);
 	const model = props.model;
-	console.log(model);
 	let gltf = useLoader(GLTFLoader, getPath(model));
 	const [gltfGeometry, setGltfGeometry] = useState();
 	const [pos, setPos] = useState({ i: -100, j: -100 });

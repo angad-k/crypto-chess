@@ -1,0 +1,118 @@
+import { Models } from "./piece";
+
+const positions = [
+	{
+		j: 0,
+		i: 0,
+		coord: "A1",
+		model: Models.ROOK,
+		side: 0,
+	},
+	{
+		j: 0,
+		i: 1,
+		coord: "B1",
+		model: Models.KNIGHT,
+		side: 0,
+	},
+	{
+		j: 0,
+		i: 2,
+		coord: "C1",
+		model: Models.BISHOP,
+		side: 0,
+	},
+	{
+		j: 0,
+		i: 3,
+		coord: "D1",
+		model: Models.KING,
+		side: 0,
+	},
+	{
+		j: 0,
+		i: 4,
+		coord: "E1",
+		model: Models.QUEEN,
+		side: 0,
+	},
+	{
+		j: 0,
+		i: 5,
+		coord: "F1",
+		model: Models.BISHOP,
+		side: 0,
+	},
+	{
+		j: 0,
+		i: 6,
+		coord: "G1",
+		model: Models.KNIGHT,
+		side: 0,
+	},
+	{
+		j: 0,
+		i: 7,
+		coord: "H1",
+		model: Models.ROOK,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 0,
+		coord: "A2",
+		model: Models.PAWN,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 1,
+		coord: "B2",
+		model: Models.PAWN,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 2,
+		coord: "C2",
+		model: Models.PAWN,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 3,
+		coord: "D2",
+		model: Models.PAWN,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 4,
+		coord: "E2",
+		model: Models.PAWN,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 5,
+		coord: "F2",
+		model: Models.PAWN,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 6,
+		coord: "G2",
+		model: Models.PAWN,
+		side: 0,
+	},
+	{
+		j: 1,
+		i: 7,
+		coord: "H2",
+		model: Models.PAWN,
+		side: 0,
+	},
+];
+
+export default positions;

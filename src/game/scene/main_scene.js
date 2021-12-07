@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Piece, { Models } from "./piece";
 import Board from "./board";
+import Setup from "./setup";
 extend({ OrbitControls });
 
 const CameraControls = () => {
@@ -29,9 +30,7 @@ const Chess = () => {
 				<pointLight position={[4.5, -4.5, 10]} />
 				<pointLight position={[-4.5, 4.5, 10]} />
 				<Board />
-				{[...Array(6)].map((x, i) => {
-					return <Piece row={i} col={0} side={0} model={i} />;
-				})}
+				<Setup />
 			</Canvas>
 		</Suspense>
 	);
