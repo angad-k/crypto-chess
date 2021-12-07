@@ -20,7 +20,7 @@ const getPath = (model) => {
 		case Models.PAWN:
 			return "/assets/models/Pawn.glb";
 		case Models.QUEEN:
-			return "/assets/models/King.glb";
+			return "/assets/models/Queen.glb";
 		case Models.ROOK:
 			return "/assets/models/Rook.glb";
 		case Models.BISHOP:
@@ -85,7 +85,9 @@ const getScale = (model) => {
 };
 
 const Piece = (props) => {
-	const model = Models.ROOK;
+	const [hovered, setHover] = useState(false);
+	const model = props.model;
+	console.log(model);
 	let gltf = useLoader(GLTFLoader, getPath(model));
 	const [gltfGeometry, setGltfGeometry] = useState();
 	const [pos, setPos] = useState({ i: -100, j: -100 });
@@ -115,6 +117,13 @@ const Piece = (props) => {
 		rotation: [-Math.PI, 0, 0],
 		scale: getScale(model),
 	};
-	return <primitive {...gltfProps} object={gltfGeometry} />;
+	return (
+		<primitive
+			{...gltfProps}
+			object={gltfGeometry}
+			onPointerOver={(event) => setHover(true)}
+			onPointerOut={(event) => setHover(false)}
+		/>
+	);
 };
 export default Piece;
