@@ -1,7 +1,7 @@
 import React, { useRef, useState, Suspense } from "react";
 import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { Camera } from "three";
+import { Camera, MeshLambertMaterial } from "three";
 import { useGLTF } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -11,6 +11,17 @@ const Pawn = (props) => {
 	const [pos, setPos] = useState({ i: -100, j: -100 });
 	if (!gltfGeometry) {
 		const gltfScene = gltf.scene.clone(true);
+		gltfScene.traverse(function (object) {
+			if (object.isMesh) {
+				object.material.color.set(
+					props.side === 0 ? 0x000000 : 0xffffff
+				);
+				object.material.transparent = true;
+				object.material.opacity = 1;
+				object.material.metalness = 0.0;
+				object.material.roughness = 1.0;
+			}
+		});
 		setGltfGeometry(gltfScene);
 	}
 	if (pos.i < 0) {
