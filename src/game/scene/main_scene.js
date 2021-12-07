@@ -20,11 +20,6 @@ const CameraControls = () => {
 };
 
 const Chess = () => {
-	let gltf = useLoader(GLTFLoader, "/assets/models/Pawn.glb");
-	//et gltf1 = gltf.clone();
-	//let gltf2 = gltf.nodes.clone();
-	//let gltf3 = gltf.clone();
-
 	return (
 		<Suspense fallback={<></>}>
 			<Canvas
@@ -38,7 +33,7 @@ const Chess = () => {
 				<pointLight position={[4.5, -4.5, 10]} />
 				<pointLight position={[-4.5, 4.5, 10]} />
 				<Board />
-				<Pawn row={4} col={4} side={0} />
+				<Pawn row={0} col={0} side={0} />
 			</Canvas>
 		</Suspense>
 	);
