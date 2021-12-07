@@ -84,8 +84,8 @@ const getScale = (model) => {
 	}
 };
 
-const Pawn = (props) => {
-	const model = Models.KNIGHT;
+const Piece = (props) => {
+	const model = Models.ROOK;
 	let gltf = useLoader(GLTFLoader, getPath(model));
 	const [gltfGeometry, setGltfGeometry] = useState();
 	const [pos, setPos] = useState({ i: -100, j: -100 });
@@ -117,4 +117,4 @@ const Pawn = (props) => {
 	};
 	return <primitive {...gltfProps} object={gltfGeometry} />;
 };
-export default Pawn;
+export default Piece;
