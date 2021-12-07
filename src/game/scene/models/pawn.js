@@ -5,6 +5,7 @@ import { Camera, MeshLambertMaterial } from "three";
 import { useGLTF } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
 export const Models = {
 	PAWN: 0,
 	QUEEN: 1,
@@ -12,6 +13,23 @@ export const Models = {
 	BISHOP: 3,
 	KNIGHT: 4,
 	KING: 5,
+};
+
+const getPath = (model) => {
+	switch (model) {
+		case Models.PAWN:
+			return "/assets/models/Pawn.glb";
+		case Models.QUEEN:
+			return "/assets/models/King.glb";
+		case Models.ROOK:
+			return "/assets/models/Rook.glb";
+		case Models.BISHOP:
+			return "/assets/models/Bishop.glb";
+		case Models.KING:
+			return "/assets/models/King.glb";
+		case Models.KNIGHT:
+			return "/assets/models/Knight.glb";
+	}
 };
 
 const getOffset = (model) => {
@@ -23,8 +41,28 @@ const getOffset = (model) => {
 			};
 		case Models.QUEEN:
 			return {
-				x: -2.8,
-				y: 0,
+				x: -2,
+				y: 0.35,
+			};
+		case Models.ROOK:
+			return {
+				x: -0.35,
+				y: 0.35,
+			};
+		case Models.BISHOP:
+			return {
+				x: -0.43,
+				y: 0.43,
+			};
+		case Models.KING:
+			return {
+				x: -0.4,
+				y: 0.35,
+			};
+		case Models.KNIGHT:
+			return {
+				x: -0.38,
+				y: 0.4,
 			};
 	}
 };
@@ -32,20 +70,23 @@ const getOffset = (model) => {
 const getScale = (model) => {
 	switch (model) {
 		case Models.PAWN:
-			return {
-				x: -0.43,
-				y: 0.43,
-			};
+			return 0.035;
 		case Models.QUEEN:
-			return {
-				x: -2.8,
-				y: 0,
-			};
+			return 0.025;
+		case Models.ROOK:
+			return 0.025;
+		case Models.BISHOP:
+			return 0.028;
+		case Models.KING:
+			return 0.025;
+		case Models.KNIGHT:
+			return 0.025;
 	}
 };
 
 const Pawn = (props) => {
-	let gltf = useLoader(GLTFLoader, "/assets/models/Queen.glb");
+	const model = Models.KNIGHT;
+	let gltf = useLoader(GLTFLoader, getPath(model));
 	const [gltfGeometry, setGltfGeometry] = useState();
 	const [pos, setPos] = useState({ i: -100, j: -100 });
 	if (!gltfGeometry) {
@@ -53,12 +94,12 @@ const Pawn = (props) => {
 		gltfScene.traverse(function (object) {
 			if (object.isMesh) {
 				object.material.color.set(
-					props.side === 0 ? 0x000000 : 0xffffff
+					props.side === 0 ? 0x000000 : 0xeeeeee
 				);
 				object.material.transparent = true;
 				object.material.opacity = 1;
 				object.material.metalness = 0.0;
-				object.material.roughness = 1.0;
+				object.material.roughness = 0.8;
 			}
 		});
 		setGltfGeometry(gltfScene);
@@ -67,12 +108,12 @@ const Pawn = (props) => {
 		const newPos = { i: props.row, j: props.col };
 		setPos(newPos);
 	}
-	const offset = getOffset(Models.QUEEN);
+	const offset = getOffset(model);
 	const gltfProps = {
 		object: gltfGeometry,
 		position: [-4.5 + offset.x + pos.i, -4.5 + offset.y + pos.j, 0.5],
 		rotation: [-Math.PI, 0, 0],
-		scale: 0.035,
+		scale: getScale(model),
 	};
 	return <primitive {...gltfProps} object={gltfGeometry} />;
 };

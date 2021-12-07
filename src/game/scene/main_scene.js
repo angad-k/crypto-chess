@@ -33,7 +33,7 @@ const Chess = () => {
 				<pointLight position={[4.5, -4.5, 10]} />
 				<pointLight position={[-4.5, 4.5, 10]} />
 				<Board />
-				<Pawn row={0} col={0} side={0} />
+				<Pawn row={0} col={0} side={1} />
 			</Canvas>
 		</Suspense>
 	);
