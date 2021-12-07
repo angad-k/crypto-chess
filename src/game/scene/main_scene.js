@@ -1,8 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, Suspense } from "react";
 import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Camera } from "three";
-
+import { useGLTF } from "@react-three/drei";
+import { useLoader } from "@react-three/fiber";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import Pawn from "./models/pawn";
 extend({ OrbitControls });
 
 function Box(props) {
@@ -18,7 +21,7 @@ function Box(props) {
 		<mesh
 			position={props.position}
 			ref={mesh}
-			scale={active ? 1.5 : 1}
+			scale={1}
 			onClick={(event) => setActive(!active)}
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}
@@ -26,9 +29,9 @@ function Box(props) {
 			<boxGeometry args={[1, 1, 1]} />
 			<meshStandardMaterial
 				color={
-					hovered
+					props.row == 0 && props.col == 0
 						? "grey"
-						: (props.row + props.col) % 2 == 0
+						: (props.row + props.col) % 2 === 0
 						? "black"
 						: "white"
 				}
@@ -50,22 +53,36 @@ const CameraControls = () => {
 };
 
 const Chess = () => {
+	let gltf = useLoader(GLTFLoader, "/assets/models/Pawn.glb");
+	//et gltf1 = gltf.clone();
+	//let gltf2 = gltf.nodes.clone();
+	//let gltf3 = gltf.clone();
+
 	return (
-		<Canvas
-			gl={{ antialias: true }}
-			dpr={Math.max(window.devicePixelRatio, 2)}
-		>
-			<CameraControls />
-			<ambientLight />
-			<pointLight position={[10, 10, 10]} />
-			{[...Array(8)].map((x, i) => {
-				return [...Array(8)].map((y, j) => {
-					return (
-						<Box position={[i - 4.5, j - 4.5, 0]} row={i} col={j} />
-					);
-				});
-			})}
-		</Canvas>
+		<Suspense fallback={<></>}>
+			<Canvas
+				gl={{ antialias: true }}
+				dpr={Math.max(window.devicePixelRatio, 2)}
+			>
+				<CameraControls />
+				<ambientLight />
+				<pointLight position={[10, 10, 10]} />
+				{[...Array(8)].map((x, i) => {
+					return [...Array(8)].map((y, j) => {
+						return (
+							<>
+								<Box
+									position={[i - 4.5, j - 4.5, 0]}
+									row={i}
+									col={j}
+								/>
+								<Pawn row={i} col={j} />
+							</>
+						);
+					});
+				})}
+			</Canvas>
+		</Suspense>
 	);
 };
 
