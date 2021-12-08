@@ -5,6 +5,7 @@ import { Camera, MeshLambertMaterial } from "three";
 import { useGLTF } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { act } from "react-dom/test-utils";
 function Box(props) {
 	const mesh = useRef();
 	const [hovered, setHover] = useState(false);
@@ -21,8 +22,8 @@ function Box(props) {
 			<boxGeometry args={[1, 1, 1]} />
 			<meshStandardMaterial
 				color={
-					hovered
-						? "grey"
+					props.active
+						? "green"
 						: (props.row + props.col) % 2 === 0
 						? "black"
 						: "white"
@@ -31,12 +32,23 @@ function Box(props) {
 		</mesh>
 	);
 }
-const Board = () => {
+const Board = (props) => {
 	return [...Array(8)].map((x, i) => {
 		return [...Array(8)].map((y, j) => {
+			let active = false;
+			props.active.forEach((p, q) => {
+				if (p[0] == i && p[1] == j) {
+					active = true;
+				}
+			});
 			return (
 				<>
-					<Box position={[i - 4.5, j - 4.5, 0]} row={i} col={j} />
+					<Box
+						position={[i - 4.5, j - 4.5, 0]}
+						row={i}
+						col={j}
+						active={active}
+					/>
 				</>
 			);
 		});

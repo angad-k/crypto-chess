@@ -5,6 +5,7 @@ import { Camera, MeshLambertMaterial } from "three";
 import { useGLTF } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { getNotationFromCoords } from "./coordutils";
 
 export const Models = {
 	PAWN: 0,
@@ -15,20 +16,37 @@ export const Models = {
 	KING: 5,
 };
 
-const getPath = (model) => {
-	switch (model) {
-		case Models.PAWN:
-			return "/assets/models/Pawn.glb";
-		case Models.QUEEN:
-			return "/assets/models/Queen.glb";
-		case Models.ROOK:
-			return "/assets/models/Rook.glb";
-		case Models.BISHOP:
-			return "/assets/models/Bishop.glb";
-		case Models.KING:
-			return "/assets/models/King.glb";
-		case Models.KNIGHT:
-			return "/assets/models/Knight.glb";
+const getPath = (model, side) => {
+	if (side == 0) {
+		switch (model) {
+			case Models.PAWN:
+				return "/assets/models/Pawn.glb";
+			case Models.QUEEN:
+				return "/assets/models/Queen.glb";
+			case Models.ROOK:
+				return "/assets/models/Rook.glb";
+			case Models.BISHOP:
+				return "/assets/models/Bishop.glb";
+			case Models.KING:
+				return "/assets/models/King.glb";
+			case Models.KNIGHT:
+				return "/assets/models/Knight.glb";
+		}
+	} else {
+		switch (model) {
+			case Models.PAWN:
+				return "/assets/models/PawnX.glb";
+			case Models.QUEEN:
+				return "/assets/models/QueenX.glb";
+			case Models.ROOK:
+				return "/assets/models/RookX.glb";
+			case Models.BISHOP:
+				return "/assets/models/BishopX.glb";
+			case Models.KING:
+				return "/assets/models/KingX.glb";
+			case Models.KNIGHT:
+				return "/assets/models/KnightX.glb";
+		}
 	}
 };
 
@@ -87,42 +105,61 @@ const getScale = (model) => {
 const Piece = (props) => {
 	const [hovered, setHover] = useState(false);
 	const model = props.model;
-	let gltf = useLoader(GLTFLoader, getPath(model));
+	let gltf = useLoader(GLTFLoader, getPath(model, props.side));
 	const [gltfGeometry, setGltfGeometry] = useState();
-	const [pos, setPos] = useState({ i: -100, j: -100 });
 	if (!gltfGeometry) {
 		const gltfScene = gltf.scene.clone(true);
 		gltfScene.traverse(function (object) {
 			if (object.isMesh) {
+				if (props.side === 0) {
+					object.material.color.set(0x000000);
+				} else {
+					object.material.color.set(0xeeeeee);
+				}
 				object.material.color.set(
-					props.side === 0 ? 0x000000 : 0xeeeeee
+					props.side == 0 ? 0x555555 : 0x000000
 				);
 				object.material.transparent = true;
 				object.material.opacity = 1;
 				object.material.metalness = 0.0;
 				object.material.roughness = 0.8;
+				if (props.side === 1) {
+					object.rotateY(Math.PI);
+				}
 			}
 		});
 		setGltfGeometry(gltfScene);
 	}
-	if (pos.i < 0) {
-		const newPos = { i: props.row, j: props.col };
-		setPos(newPos);
-	}
 	const offset = getOffset(model);
-	const gltfProps = {
-		object: gltfGeometry,
-		position: [-4.5 + offset.x + pos.i, -4.5 + offset.y + pos.j, 0.5],
-		rotation: [-Math.PI, 0, 0],
-		scale: getScale(model),
+	let gltfProps;
+	if (props.side === 0) {
+		gltfProps = {
+			object: gltfGeometry,
+			position: [
+				-4.5 + offset.x + props.row,
+				-4.5 + offset.y + props.col,
+				0.5,
+			],
+			rotation: [-Math.PI, 0, 0],
+			scale: getScale(model),
+		};
+	} else {
+		gltfProps = {
+			object: gltfGeometry,
+			position: [
+				-4.5 - offset.x + props.row,
+				-4.5 - offset.y + props.col,
+				0.5,
+			],
+			rotation: [-Math.PI, 0, 0],
+			scale: getScale(model),
+		};
+	}
+	const handleClick = () => {
+		props.handleClick(getNotationFromCoords(props.row, props.col));
 	};
 	return (
-		<primitive
-			{...gltfProps}
-			object={gltfGeometry}
-			onPointerOver={(event) => setHover(true)}
-			onPointerOut={(event) => setHover(false)}
-		/>
+		<primitive {...gltfProps} object={gltfGeometry} onClick={handleClick} />
 	);
 };
 export default Piece;

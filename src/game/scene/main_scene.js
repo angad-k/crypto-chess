@@ -4,6 +4,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Piece, { Models } from "./piece";
 import Board from "./board";
 import Setup from "./setup";
+import initialPositions from "./positions";
+import { useEffect } from "react/cjs/react.development";
+import { Game, move, status, moves, aiMove, getFen } from "js-chess-engine";
+import { getCoordsFromNotation } from "./coordutils";
 extend({ OrbitControls });
 
 const CameraControls = () => {
@@ -17,6 +21,25 @@ const CameraControls = () => {
 };
 
 const Chess = () => {
+	const [positions, setPositions] = useState(initialPositions);
+	const [activeBlocks, setActiveBlocks] = useState([]);
+	const [game, setGame] = useState();
+	if (!game) {
+		let g = new Game();
+		setGame(g);
+	}
+	const handlePieceClick = (n) => {
+		let moves = game.moves(n);
+		console.log(moves);
+		let aB = moves.map((x, i) => {
+			return getCoordsFromNotation(x);
+		});
+		console.log(aB);
+		setActiveBlocks(aB);
+	};
+	const handleBlockClick = (n) => {
+		console.log(n);
+	};
 	return (
 		<Suspense fallback={<></>}>
 			<Canvas
@@ -25,12 +48,18 @@ const Chess = () => {
 			>
 				<CameraControls />
 				<ambientLight />
-				<pointLight position={[4.5, 4.5, 10]} />
-				<pointLight position={[-4.5, -4.5, 10]} />
-				<pointLight position={[4.5, -4.5, 10]} />
-				<pointLight position={[-4.5, 4.5, 10]} />
-				<Board />
-				<Setup />
+				<pointLight position={[4.5, 4.5, 20]} />
+				<pointLight position={[-4.5, -4.5, 20]} />
+				<pointLight position={[4.5, -4.5, 20]} />
+				<pointLight position={[-4.5, 4.5, 20]} />
+				<Board
+					active={activeBlocks}
+					handleBlockClick={handleBlockClick}
+				/>
+				<Setup
+					positions={positions}
+					handlePieceClick={handlePieceClick}
+				/>
 			</Canvas>
 		</Suspense>
 	);
