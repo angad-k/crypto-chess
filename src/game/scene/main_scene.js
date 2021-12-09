@@ -8,6 +8,7 @@ import initialPositions from "./positions";
 import { useEffect } from "react/cjs/react.development";
 import { Game, move, status, moves, aiMove, getFen } from "js-chess-engine";
 import { getCoordsFromNotation } from "./coordutils";
+import { Colors } from "./utils";
 extend({ OrbitControls });
 
 const CameraControls = () => {
@@ -17,7 +18,13 @@ const CameraControls = () => {
 	} = useThree();
 	const controls = useRef();
 	useFrame((state) => controls.current.update());
-	return <orbitControls ref={controls} args={[camera, domElement]} />;
+	return (
+		<orbitControls
+			ref={controls}
+			args={[camera, domElement]}
+			enableDamping={true}
+		/>
+	);
 };
 
 const Chess = () => {
@@ -46,7 +53,7 @@ const Chess = () => {
 		const toCoordinates = getCoordsFromNotation(to);
 		let newpositions = positions.map((x, i) => {
 			if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
-				if (x.side == 0) {
+				if (x.side == Colors.WHITE) {
 					x.i = whiteSideCoord[0];
 					x.j = whiteSideCoord[1];
 					x.alive = false;
@@ -116,19 +123,21 @@ const Chess = () => {
 				dpr={Math.max(window.devicePixelRatio, 2)}
 			>
 				<CameraControls />
-				<ambientLight />
-				<pointLight position={[4.5, 4.5, 20]} />
-				<pointLight position={[-4.5, -4.5, 20]} />
-				<pointLight position={[4.5, -4.5, 20]} />
-				<pointLight position={[-4.5, 4.5, 20]} />
-				<Board
-					active={activeBlocks}
-					handleBlockClick={handleBlockClick}
-				/>
-				<Setup
-					positions={positions}
-					handlePieceClick={handlePieceClick}
-				/>
+				<group rotation={[0, 0, Math.PI]}>
+					<ambientLight />
+					<pointLight position={[4.5, 4.5, 20]} />
+					<pointLight position={[-4.5, -4.5, 20]} />
+					<pointLight position={[4.5, -4.5, 20]} />
+					<pointLight position={[-4.5, 4.5, 20]} />
+					<Board
+						active={activeBlocks}
+						handleBlockClick={handleBlockClick}
+					/>
+					<Setup
+						positions={positions}
+						handlePieceClick={handlePieceClick}
+					/>
+				</group>
 			</Canvas>
 		</Suspense>
 	);

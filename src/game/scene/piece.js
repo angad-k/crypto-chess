@@ -6,6 +6,7 @@ import { useGLTF } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { getNotationFromCoords } from "./coordutils";
+import { Colors } from "./utils";
 
 export const Models = {
 	PAWN: 0,
@@ -17,7 +18,7 @@ export const Models = {
 };
 
 const getPath = (model, side) => {
-	if (side == 0) {
+	if (side == Colors.WHITE) {
 		switch (model) {
 			case Models.PAWN:
 				return "/assets/models/Pawn.glb";
@@ -110,19 +111,14 @@ const Piece = (props) => {
 		const gltfScene = gltf.scene.clone(true);
 		gltfScene.traverse(function (object) {
 			if (object.isMesh) {
-				if (props.side === 0) {
-					object.material.color.set(0x000000);
-				} else {
-					object.material.color.set(0xeeeeee);
-				}
 				object.material.color.set(
-					props.side == 0 ? 0x555555 : 0x000000
+					props.side == Colors.WHITE ? 0x555555 : 0x000000
 				);
 				object.material.transparent = true;
 				object.material.opacity = 1;
 				object.material.metalness = 0.0;
 				object.material.roughness = 0.8;
-				if (props.side === 1) {
+				if (props.side === Colors.BLACK) {
 					object.rotateY(Math.PI);
 				}
 			}
@@ -131,7 +127,7 @@ const Piece = (props) => {
 	}
 	const offset = getOffset(model);
 	let gltfProps;
-	if (props.side === 0) {
+	if (props.side === Colors.WHITE) {
 		gltfProps = {
 			object: gltfGeometry,
 			position: [
