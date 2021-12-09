@@ -104,7 +104,6 @@ const getScale = (model) => {
 
 const Piece = (props) => {
 	const model = props.model;
-	console.log("pieces");
 	let gltf = useLoader(GLTFLoader, getPath(model, props.side));
 	const [gltfGeometry, setGltfGeometry] = useState();
 	if (!gltfGeometry) {

@@ -39,10 +39,10 @@ const Chess = () => {
 		setActiveBlocks(aB);
 		setSelectedPiece(n);
 	};
-	const handleBlockClick = (n) => {
-		game.move(selectedPiece, n);
+	const performMove = (from, to) => {
+		game.move(from, to);
 		const fromCoordinates = getCoordsFromNotation(selectedPiece);
-		const toCoordinates = getCoordsFromNotation(n);
+		const toCoordinates = getCoordsFromNotation(to);
 		let newpositions = positions.map((x, i) => {
 			if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
 				if (x.side == 0) {
@@ -68,7 +68,7 @@ const Chess = () => {
 					} else {
 						bws[0]++;
 					}
-					setWhiteSideCoord(bws);
+					setBlackSideCoord(bws);
 				}
 			} else if (x.i == fromCoordinates[0] && x.j == fromCoordinates[1]) {
 				x.i = toCoordinates[0];
@@ -80,6 +80,9 @@ const Chess = () => {
 		setPositions(newpositions);
 		setSelectedPiece(null);
 		setActiveBlocks([]);
+	};
+	const handleBlockClick = (n) => {
+		performMove(selectedPiece, n);
 	};
 	return (
 		<Suspense fallback={<></>}>
