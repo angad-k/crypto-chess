@@ -104,6 +104,7 @@ const getScale = (model) => {
 
 const Piece = (props) => {
 	const model = props.model;
+	console.log("pieces");
 	let gltf = useLoader(GLTFLoader, getPath(model, props.side));
 	const [gltfGeometry, setGltfGeometry] = useState();
 	if (!gltfGeometry) {
@@ -158,7 +159,14 @@ const Piece = (props) => {
 		props.handleClick(getNotationFromCoords(props.row, props.col));
 	};
 	return (
-		<primitive {...gltfProps} object={gltfGeometry} onClick={handleClick} />
+		<group dispose={undefined}>
+			<primitive
+				{...gltfProps}
+				dispose={undefined}
+				object={gltfGeometry}
+				onClick={handleClick}
+			/>
+		</group>
 	);
 };
 export default Piece;
