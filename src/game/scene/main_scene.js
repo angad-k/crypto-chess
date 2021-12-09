@@ -36,11 +36,18 @@ const Chess = (props) => {
 	const [whiteSideCoord, setWhiteSideCoord] = useState([0, 8]);
 	const [game, setGame] = useState();
 	const [gameEnded, setGameEnded] = useState(false);
+	const [gameStarted, setGameStarted] = useState(false);
 	const [winner, setWinner] = useState();
+	const [playerColor, setPlayerColor] = useState();
+	const [interactionSocket, setInteractionSocket] = useState();
 	if (!game) {
 		let g = new Game();
 		setGame(g);
 	}
+	const colorCallback = (c) => {
+		setPlayerColor(parseInt(c));
+		setGameStarted(true);
+	};
 	const handlePieceClick = (n) => {
 		let moves = game.moves(n);
 		let aB = moves.map((x, i) => {
@@ -104,10 +111,27 @@ const Chess = (props) => {
 			}
 		}
 	};
+	if (!interactionSocket) {
+		let intsoc = new interactionSocket(
+			props.gameCode,
+			props.pubKey,
+			props.isHost,
+			colorCallback,
+			performMove
+		);
+		setInteractionSocket(intsoc);
+	}
 	const handleBlockClick = (n) => {
 		performMove(selectedPiece, n);
+		interactionSocket.makeMove(selectedPiece, n);
 	};
-
+	if (!gameStarted) {
+		return (
+			<div style={{ height: "100vh", width: "100%" }}>
+				Waiting for other player to join...
+			</div>
+		);
+	}
 	if (gameEnded) {
 		return (
 			<div style={{ height: "100vh", width: "100%" }}>
@@ -125,11 +149,7 @@ const Chess = (props) => {
 			>
 				<CameraControls />
 				<group
-					rotation={[
-						0,
-						0,
-						props.player == Colors.BLACK ? Math.PI : 0,
-					]}
+					rotation={[0, 0, playerColor == Colors.BLACK ? Math.PI : 0]}
 				>
 					<ambientLight />
 					<pointLight position={[4.5, 4.5, 20]} />
@@ -139,10 +159,12 @@ const Chess = (props) => {
 					<Board
 						active={activeBlocks}
 						handleBlockClick={handleBlockClick}
+						playerColor={playerColor}
 					/>
 					<Setup
 						positions={positions}
 						handlePieceClick={handlePieceClick}
+						playerColor={playerColor}
 					/>
 				</group>
 			</Canvas>

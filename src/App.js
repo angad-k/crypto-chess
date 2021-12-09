@@ -6,7 +6,7 @@ function App() {
 	return (
 		<div style={{height :'100vh', width : "100%"}}>
 			<Suspense fallback={<></>}>
-			<Chess></Chess>
+			<Chess gameCode = "abc" pubKey = "xyz" isHost = "true"></Chess>
 			</Suspense>
 		</div>
 	);

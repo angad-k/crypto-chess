@@ -151,7 +151,9 @@ const Piece = (props) => {
 		};
 	}
 	const handleClick = () => {
-		props.handleClick(getNotationFromCoords(props.row, props.col));
+		if (props.clickable) {
+			props.handleClick(getNotationFromCoords(props.row, props.col));
+		}
 	};
 	return (
 		<group dispose={undefined}>

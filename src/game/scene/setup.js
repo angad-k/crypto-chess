@@ -13,6 +13,7 @@ const Setup = (props) => {
 				side={position.side}
 				model={position.model}
 				handleClick={props.handlePieceClick}
+				clickable={position.side == props.playerColor}
 			/>
 		);
 	});

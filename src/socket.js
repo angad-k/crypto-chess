@@ -3,9 +3,20 @@ import { MSG_DELIM, splitMessage } from "./utils";
 const url = "test";
 
 export class SocketInteraction {
-	constructor(gameCode, colorCallback, opponentMoveCallback) {
+	constructor(gameCode, pubKey, isHost, colorCallback, opponentMoveCallback) {
 		this.s = new WebSocket(url);
 		this.gameCode = gameCode;
+		this.s.onopen = () => {
+			if (isHost) {
+				this.s.send(
+					`new_game${MSG_DELIM}${pubKey}${MSG_DELIM}${this.gameCode}`
+				);
+			} else {
+				this.s.send(
+					`join_game${MSG_DELIM}${pubKey}${MSG_DELIM}${this.gameCode}`
+				);
+			}
+		};
 		this.s.onmessage = (event) => {
 			let msg = event.data;
 			let [cmd, arg] = splitMessage(msg);
@@ -21,16 +32,6 @@ export class SocketInteraction {
 				}
 			}
 		};
-	}
-	newGame(pubKey) {
-		this.s.send(
-			`new_game${MSG_DELIM}${pubKey}${MSG_DELIM}${this.gameCode}`
-		);
-	}
-	joinGame(pubKey) {
-		this.s.send(
-			`join_game${MSG_DELIM}${pubKey}${MSG_DELIM}${this.gameCode}`
-		);
 	}
 	makeMove(from, to) {
 		this.s.send(`move${MSG_DELIM}${from}${MSG_DELIM}${to}`);
