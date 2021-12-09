@@ -47,7 +47,7 @@ const Board = (props) => {
 			return (
 				<>
 					<Box
-						position={[i - 4.5, j - 4.5, 0]}
+						position={[i - 3.5, j - 3.5, 0]}
 						row={i}
 						col={j}
 						active={active}

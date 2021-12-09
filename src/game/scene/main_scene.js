@@ -9,6 +9,7 @@ import { useEffect } from "react/cjs/react.development";
 import { Game, move, status, moves, aiMove, getFen } from "js-chess-engine";
 import { getCoordsFromNotation } from "./coordutils";
 import { Colors } from "./utils";
+import { Environment } from "@react-three/drei";
 extend({ OrbitControls });
 
 const CameraControls = () => {
@@ -27,7 +28,7 @@ const CameraControls = () => {
 	);
 };
 
-const Chess = () => {
+const Chess = (props) => {
 	const [positions, setPositions] = useState(initialPositions);
 	const [activeBlocks, setActiveBlocks] = useState([]);
 	const [selectedPiece, setSelectedPiece] = useState();
@@ -123,7 +124,13 @@ const Chess = () => {
 				dpr={Math.max(window.devicePixelRatio, 2)}
 			>
 				<CameraControls />
-				<group rotation={[0, 0, Math.PI]}>
+				<group
+					rotation={[
+						0,
+						0,
+						props.player == Colors.BLACK ? Math.PI : 0,
+					]}
+				>
 					<ambientLight />
 					<pointLight position={[4.5, 4.5, 20]} />
 					<pointLight position={[-4.5, -4.5, 20]} />

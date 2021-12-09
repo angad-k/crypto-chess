@@ -131,8 +131,8 @@ const Piece = (props) => {
 		gltfProps = {
 			object: gltfGeometry,
 			position: [
-				-4.5 + offset.x + props.row,
-				-4.5 + offset.y + props.col,
+				-3.5 + offset.x + props.row,
+				-3.5 + offset.y + props.col,
 				0.5,
 			],
 			rotation: [-Math.PI, 0, 0],
@@ -142,8 +142,8 @@ const Piece = (props) => {
 		gltfProps = {
 			object: gltfGeometry,
 			position: [
-				-4.5 - offset.x + props.row,
-				-4.5 - offset.y + props.col,
+				-3.5 - offset.x + props.row,
+				-3.5 - offset.y + props.col,
 				0.5,
 			],
 			rotation: [-Math.PI, 0, 0],
