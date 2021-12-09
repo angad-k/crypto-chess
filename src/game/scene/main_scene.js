@@ -27,6 +27,8 @@ const Chess = () => {
 	const [blackSideCoord, setBlackSideCoord] = useState([0, -1]);
 	const [whiteSideCoord, setWhiteSideCoord] = useState([0, 8]);
 	const [game, setGame] = useState();
+	const [gameEnded, setGameEnded] = useState(false);
+	const [winner, setWinner] = useState();
 	if (!game) {
 		let g = new Game();
 		setGame(g);
@@ -40,7 +42,6 @@ const Chess = () => {
 		setSelectedPiece(n);
 	};
 	const performMove = (from, to) => {
-		game.move(from, to);
 		const fromCoordinates = getCoordsFromNotation(selectedPiece);
 		const toCoordinates = getCoordsFromNotation(to);
 		let newpositions = positions.map((x, i) => {
@@ -80,10 +81,34 @@ const Chess = () => {
 		setPositions(newpositions);
 		setSelectedPiece(null);
 		setActiveBlocks([]);
+		game.move(from, to);
+		let json = game.exportJson();
+		if (json["check"]) {
+			console.log("check");
+		}
+		if (json["checkMate"]) {
+			console.log("checkMate");
+			setGameEnded(true);
+			if (json["turn"] == "black") {
+				setWinner("White");
+			} else {
+				setWinner("Black");
+			}
+		}
 	};
 	const handleBlockClick = (n) => {
 		performMove(selectedPiece, n);
 	};
+
+	if (gameEnded) {
+		return (
+			<div style={{ height: "100vh", width: "100%" }}>
+				Khatam Tata Bye Bye
+				<br></br>
+				{winner} Wins.
+			</div>
+		);
+	}
 	return (
 		<Suspense fallback={<></>}>
 			<Canvas

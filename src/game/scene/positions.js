@@ -25,14 +25,14 @@ const initialPositions = [
 	{
 		j: 0,
 		i: 3,
-		model: Models.KING,
+		model: Models.QUEEN,
 		side: 0,
 		alive: false,
 	},
 	{
 		j: 0,
 		i: 4,
-		model: Models.QUEEN,
+		model: Models.KING,
 		side: 0,
 		alive: false,
 	},
@@ -137,14 +137,14 @@ const initialPositions = [
 	{
 		j: 7,
 		i: 3,
-		model: Models.KING,
+		model: Models.QUEEN,
 		side: 1,
 		alive: false,
 	},
 	{
 		j: 7,
 		i: 4,
-		model: Models.QUEEN,
+		model: Models.KING,
 		side: 1,
 		alive: false,
 	},
