@@ -6,18 +6,21 @@ import { useGLTF } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { act } from "react-dom/test-utils";
+import { getNotationFromCoords } from "./coordutils";
 function Box(props) {
 	const mesh = useRef();
-	const [hovered, setHover] = useState(false);
-	const [active, setActive] = useState(false);
 	return (
 		<mesh
 			position={props.position}
 			ref={mesh}
 			scale={1}
-			onClick={(event) => setActive(!active)}
-			onPointerOver={(event) => setHover(true)}
-			onPointerOut={(event) => setHover(false)}
+			onClick={() => {
+				if (props.active) {
+					props.handleClick(
+						getNotationFromCoords(props.row, props.col)
+					);
+				}
+			}}
 		>
 			<boxGeometry args={[1, 1, 1]} />
 			<meshStandardMaterial
@@ -48,6 +51,7 @@ const Board = (props) => {
 						row={i}
 						col={j}
 						active={active}
+						handleClick={props.handleBlockClick}
 					/>
 				</>
 			);

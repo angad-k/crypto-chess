@@ -103,7 +103,6 @@ const getScale = (model) => {
 };
 
 const Piece = (props) => {
-	const [hovered, setHover] = useState(false);
 	const model = props.model;
 	let gltf = useLoader(GLTFLoader, getPath(model, props.side));
 	const [gltfGeometry, setGltfGeometry] = useState();

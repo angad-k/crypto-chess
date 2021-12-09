@@ -23,6 +23,7 @@ const CameraControls = () => {
 const Chess = () => {
 	const [positions, setPositions] = useState(initialPositions);
 	const [activeBlocks, setActiveBlocks] = useState([]);
+	const [selectedPiece, setSelectedPiece] = useState();
 	const [game, setGame] = useState();
 	if (!game) {
 		let g = new Game();
@@ -30,15 +31,36 @@ const Chess = () => {
 	}
 	const handlePieceClick = (n) => {
 		let moves = game.moves(n);
-		console.log(moves);
 		let aB = moves.map((x, i) => {
 			return getCoordsFromNotation(x);
 		});
-		console.log(aB);
 		setActiveBlocks(aB);
+		setSelectedPiece(n);
 	};
 	const handleBlockClick = (n) => {
-		console.log(n);
+		game.move(selectedPiece, n);
+		const fromCoordinates = getCoordsFromNotation(selectedPiece);
+		const toCoordinates = getCoordsFromNotation(n);
+		let newpositions = positions
+			.filter((x, i) => {
+				if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
+					console.log("udaya");
+					return false;
+				}
+				return true;
+			})
+			.map((x, i) => {
+				if (x.i == fromCoordinates[0] && x.j == fromCoordinates[1]) {
+					x.i = toCoordinates[0];
+					x.j = toCoordinates[1];
+					console.log("badal");
+				}
+				return x;
+			});
+		console.log(newpositions);
+		setPositions(newpositions);
+		setSelectedPiece(null);
+		setActiveBlocks([]);
 	};
 	return (
 		<Suspense fallback={<></>}>
