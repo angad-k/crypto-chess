@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@truffle/hdwallet-provider": "^2.0.0",
     "dotenv": "^10.0.0",
     "ethers": "^5.5.2",
     "js-chess-engine": "^1.0.2",
