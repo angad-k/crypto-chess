@@ -5,6 +5,7 @@ import TopNav from "../components/TopNav";
 import Img1v1 from "../images/1v1.png";
 import ImgPractice from "../images/practice.png";
 import ImgBetting from "../images/betting.png";
+import { cardCtaStyles } from "../utils/theme";
 
 const getModal = (showModal, closeModal) => {
   switch (showModal) {
@@ -26,14 +27,22 @@ const Dashboard = () => {
   return (
     <div className="bg-dark min-h-screen">
       <TopNav />
-      <div className="h-screen -mt-24 flex justify-center items-center gap-x-20">
+      <div className="h-screen -mt-24 flex justify-center items-center gap-x-24">
         <DashboardCard
           image={Img1v1}
-          title={"1v1"}
+          title={"1v1 Match"}
           cta={
             <>
-              <button onClick={() => setShowModal("Join")}>Join Game</button>
-              <button onClick={() => setShowModal("Create")}>
+              <button
+                onClick={() => setShowModal("Join")}
+                className={cardCtaStyles}
+              >
+                Join Game
+              </button>
+              <button
+                onClick={() => setShowModal("Create")}
+                className={cardCtaStyles}
+              >
                 Create Game
               </button>
             </>
@@ -42,12 +51,12 @@ const Dashboard = () => {
         <DashboardCard
           image={ImgPractice}
           title={"Practice Arena"}
-          cta={<button>Start Practice Game</button>}
+          cta={<button className={cardCtaStyles}>Start Practice Game</button>}
         />
         <DashboardCard
           image={ImgBetting}
           title={"Live Betting"}
-          cta={<button>Place Bet</button>}
+          cta={<button className={cardCtaStyles}>Place Bet</button>}
         />
         {getModal(showModal, handleCloseModal)}
       </div>
