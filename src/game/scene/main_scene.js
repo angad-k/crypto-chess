@@ -245,9 +245,15 @@ const Chess = (props) => {
 							>
 								You win.
 							</span>
-							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-								Claim reward.
-							</button>
+							{props.practiceGame ? (
+								<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+									Back
+								</button>
+							) : (
+								<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+									Claim reward.
+								</button>
+							)}
 						</span>
 					</div>
 				</>
