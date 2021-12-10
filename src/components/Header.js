@@ -1,69 +1,68 @@
 import React from "react";
-import detectEthereumProvider from '@metamask/detect-provider'
-import { Link, Box, Flex, Text, Button, Stack } from "@chakra-ui/react";
-
+import detectEthereumProvider from "@metamask/detect-provider";
 import Logo from "./Logo";
 
-const connectWallet = async () => {     
+const connectWallet = async () => {
   const provider = await detectEthereumProvider({
-    mustBeMetaMask: true
-  })
-  
+    mustBeMetaMask: true,
+  });
+
   if (provider) {
     try {
-      provider.on("chainChanged", () => {         
-        window.location.reload()
-      })
+      provider.on("chainChanged", () => {
+        window.location.reload();
+      });
       const chainId = await provider.request({
-        method: 'eth_chainId'
-      })
-      if (chainId === '0x13881'){
-        console.log('Already connected')
+        method: "eth_chainId",
+      });
+      if (chainId === "0x13881") {
+        console.log("Already connected");
       }
-      await provider.request({ method: 'eth_requestAccounts'})
-      provider.on('accountsChanged', (accounts) => {
+      await provider.request({ method: "eth_requestAccounts" });
+      provider.on("accountsChanged", (accounts) => {
         if (accounts.length === 0) {
-          console.log('Please connect to MetaMask.')
-        } 
-      })
+          console.log("Please connect to MetaMask.");
+        }
+      });
       await provider.request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: '0x13881',
-          chainName: 'Polygon Testnet Mumbai',
-          nativeCurrency: {
-            name: 'MATIC',
-            symbol: 'MATIC',
-            decimals: 18
-           },
-          rpcUrls: ['https://matic-mumbai.chainstacklabs.com'],
-          blockExplorerUrls: ['https://mumbai.polygonscan.com/']
-        }]
-      })
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: "0x13881",
+            chainName: "Polygon Testnet Mumbai",
+            nativeCurrency: {
+              name: "MATIC",
+              symbol: "MATIC",
+              decimals: 18,
+            },
+            rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
+            blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+          },
+        ],
+      });
       let currentAccount = null;
       function handleAccountsChanged(accounts) {
         if (accounts.length === 0) {
-          console.log('Please connect to MetaMask.');
+          console.log("Please connect to MetaMask.");
         } else if (accounts[0] !== currentAccount) {
           currentAccount = accounts[0];
-          console.log(currentAccount)
+          console.log(currentAccount);
         }
       }
       provider
-  .request({ method: 'eth_accounts' })
-  .then(handleAccountsChanged)
-  .catch((err) => {
-    console.error(err);
-  });
-  provider.on('accountsChanged', handleAccountsChanged);
-      
-    } catch(e) {
-      console.error(e)
+        .request({ method: "eth_accounts" })
+        .then(handleAccountsChanged)
+        .catch((err) => {
+          console.error(err);
+        });
+      provider.on("accountsChanged", handleAccountsChanged);
+    } catch (e) {
+      console.error(e);
     }
   } else {
-    console.error('Please install MetaMask')
+    console.error("Please install MetaMask");
   }
-}
+};
 
 const NavBar = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -105,71 +104,47 @@ const MenuIcon = () => (
 );
 
 const MenuToggle = ({ toggle, isOpen }) => {
-  return (
-    <Box display={{ base: "block", md: "none" }} onClick={toggle}>
-      {isOpen ? <CloseIcon /> : <MenuIcon />}
-    </Box>
-  );
+  return <div onClick={toggle}>{isOpen ? <CloseIcon /> : <MenuIcon />}</div>;
 };
 
 const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
   return (
-    <Link href={to}>
-      <Text display="block" {...rest}>
-        {children}
-      </Text>
-    </Link>
+    <a href={to}>
+      <p {...rest}>{children}</p>
+    </a>
   );
 };
 
 const MenuLinks = ({ isOpen }) => {
   return (
-    <Box
-      display={{ base: isOpen ? "block" : "none", md: "block" }}
-      flexBasis={{ base: "100%", md: "auto" }}
-    >
-      <Stack
-        spacing={8}
-        align="center"
-        justify={["center", "space-between", "flex-end", "flex-end"]}
-        direction={["column", "row", "row", "row"]}
-        pt={[4, 4, 0, 0]}
+    <div style={{ flexBasis: "100%", display: isOpen ? "block" : "none" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
         <MenuItem to="/signup" isLast>
-          <Button
-            onClick={connectWallet()}
-            size="sm"
-            rounded="md"
-            color={["primary.500", "primary.500", "white", "white"]}
-            bg={["white", "white", "primary.500", "primary.500"]}
-            _hover={{
-              bg: ["primary.100", "primary.100", "primary.600", "primary.600"]
-            }}
-          >
-            Connect
-          </Button>
+          <button onClick={connectWallet()}>Connect</button>
         </MenuItem>
-      </Stack>
-    </Box>
+      </div>
+    </div>
   );
 };
 
 const NavBarContainer = ({ children, ...props }) => {
   return (
-    <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      w="100%"
-      mb={8}
-      p={8}
-      bg={["primary.500", "primary.500", "transparent", "transparent"]}
-      color={["white", "white", "primary.700", "primary.700"]}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
       {...props}
     >
       {children}
-    </Flex>
+    </div>
   );
 };
 
