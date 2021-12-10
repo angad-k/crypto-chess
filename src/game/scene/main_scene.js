@@ -27,6 +27,7 @@ const CameraControls = () => {
 			ref={controls}
 			args={[camera, domElement]}
 			enableDamping={true}
+			enablePan={false}
 		/>
 	);
 };
@@ -39,7 +40,7 @@ const Chess = (props) => {
 	const [whiteSideCoord, setWhiteSideCoord] = useState([0, 8]);
 	const [game, setGame] = useState();
 	const [gameEnded, setGameEnded] = useState(false);
-	const [gameStarted, setGameStarted] = useState(true);
+	const [gameStarted, setGameStarted] = useState(false);
 	const [winner, setWinner] = useState();
 	const [playerColor, setPlayerColor] = useState();
 	const [interactionSocket, setInteractionSocket] = useState();
@@ -59,8 +60,8 @@ const Chess = (props) => {
 		setActiveBlocks(aB);
 		setSelectedPiece(n);
 	};
-	const performMove = (from, to) => {
-		const fromCoordinates = getCoordsFromNotation(selectedPiece);
+	const performMove = (from, to, aiDone = false) => {
+		const fromCoordinates = getCoordsFromNotation(from);
 		const toCoordinates = getCoordsFromNotation(to);
 		let newpositions = positions.map((x, i) => {
 			if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
@@ -99,7 +100,9 @@ const Chess = (props) => {
 		setPositions(newpositions);
 		setSelectedPiece(null);
 		setActiveBlocks([]);
-		game.move(from, to);
+		if (!aiDone) {
+			game.move(from, to);
+		}
 		let json = game.exportJson();
 		if (json["check"]) {
 			console.log("check");
@@ -114,19 +117,34 @@ const Chess = (props) => {
 			}
 		}
 	};
-	//   if (!interactionSocket) {
-	//     let intsoc = new SocketInteraction(
-	//       props.gameCode,
-	//       props.pubKey,
-	//       props.isHost,
-	//       colorCallback,
-	//       performMove
-	//     );
-	//     setInteractionSocket(intsoc);
-	//   }
+	if (!interactionSocket && !props.practiceGame) {
+		let intsoc = new SocketInteraction(
+			props.gameCode,
+			props.pubKey,
+			props.isHost,
+			colorCallback,
+			performMove
+		);
+		setInteractionSocket(intsoc);
+	}
+	if (props.practiceGame && !gameStarted) {
+		setPlayerColor(Colors.WHITE);
+		setGameStarted(true);
+	}
 	const handleBlockClick = (n) => {
 		performMove(selectedPiece, n);
-		interactionSocket.makeMove(selectedPiece, n);
+		if (!props.practiceGame) {
+			interactionSocket.makeMove(selectedPiece, n);
+		} else {
+			let m = game.aiMove();
+			for (var from in m) {
+				if (m.hasOwnProperty(from)) {
+					console.log("from = " + from);
+					console.log("to = " + m[from]);
+					performMove(from, m[from], true);
+				}
+			}
+		}
 	};
 	if (!gameStarted) {
 		return (
@@ -227,9 +245,15 @@ const Chess = (props) => {
 							>
 								You win.
 							</span>
-							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-								Claim reward.
-							</button>
+							{props.practiceGame ? (
+								<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+									Back
+								</button>
+							) : (
+								<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+									Claim reward.
+								</button>
+							)}
 						</span>
 					</div>
 				</>
