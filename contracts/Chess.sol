@@ -9,6 +9,7 @@ contract Chess {
     address player2;
     address payable winner;
     uint256 amountBet;
+    bool finished;
   }
 
   struct Better {
@@ -32,17 +33,22 @@ contract Chess {
     gameID = 1568;
   }
 
-  function newGame() public payable{
+  function newGame() public payable {
     require(msg.value > 0, "Invalid Bet Amount");
     GameInfo[gameID].player1 = msg.sender;
     GameInfo[gameID].amountBet = msg.value;
+    GameInfo[gameID].finished = false;
     uint256 game = gameID;
     GamesPlayed[msg.sender].push(game);
     gameID++;
   }
 
-  function getGameID(address player) public view returns(uint256){
-    return GamesPlayed[player][GamesPlayed[player].length-1];
+  function getGameID(address player) public view returns (uint256) {
+    return GamesPlayed[player][GamesPlayed[player].length - 1];
+  }
+
+  function getStake(uint256 game) public view returns (uint256) {
+    return GameInfo[game].amountBet;
   }
 
   function joinGame(uint256 game) public payable {
@@ -52,8 +58,10 @@ contract Chess {
   }
 
   function declareWinner(uint256 game, address winner) public {
+    require(!GameInfo[game].finished);
     require(GameInfo[game].amountBet != 0, "Game does not exist");
     require(GameInfo[game].winner == address(0));
+    require(msg.sender == owner);
     require(
       winner == GameInfo[game].player1 || winner == GameInfo[game].player2,
       "Winner not Valid"
@@ -61,6 +69,7 @@ contract Chess {
     GameInfo[game].winner = payable(winner);
     GameInfo[game].winner.transfer(2 * (GameInfo[game].amountBet));
     settleBet(game);
+    GameInfo[game].finished = true;
   }
 
   function getGames(address user) public view returns (Game[] memory) {
