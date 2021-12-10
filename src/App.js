@@ -1,6 +1,8 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import getWeb3 from "./utils/getWeb3";
 import Chess from "./build.eth/contracts/Chess.json";
+import { BrowserRouter as Router } from "react-router-dom";
+import AllRoutes from "./pages/AllRoutes";
 
 const App = () => {
   const [Web3, setWeb3] = useState(null);
@@ -33,12 +35,11 @@ const App = () => {
   useEffect(() => {
     onMount();
   }, []);
+
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <Suspense fallback={<></>}>
-        {/* <Chess gameCode="abc" pubKey="xyz" isHost="true"></Chess> */}
-      </Suspense>
-    </div>
+    <Router>
+      <AllRoutes />
+    </Router>
   );
 };
 
