@@ -7,3 +7,8 @@ export const splitMessage = (msg) => {
 	let arg = msg.substring(delimIdx + MSG_DELIM.length);
 	return [cmd, arg];
 };
+
+export const getRandomChessImagePath = () => {
+	let i = Math.floor(Math.random() * 5);
+	return "url(/assets/bg" + i + ".jpg)";
+};
