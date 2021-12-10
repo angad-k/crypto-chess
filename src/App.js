@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import getWeb3 from "./utils/getWeb3";
-import Chess from "./build.eth/contracts/Chess.json";
-import { BrowserRouter as Router } from "react-router-dom";
-import AllRoutes from "./pages/AllRoutes";
-
+import React, { Suspense, useEffect, useState } from "react";
+//import getWeb3 from "./utils/getWeb3";
+//import Chess from "./build.eth/contracts/Chess.json";
+//import { BrowserRouter as Router } from "react-router-dom";
+//import AllRoutes from "./pages/AllRoutes";
+import Chess from "./game/scene/main_scene"
 const App = () => {
+  /*
   const [Web3, setWeb3] = useState(null);
   const [Accounts, setAccounts] = useState([]);
   const [contract, setContract] = useState(null);
@@ -40,7 +41,14 @@ const App = () => {
     <Router>
       <AllRoutes />
     </Router>
-  );
+  );*/
+  return (
+		<div style={{height :'100vh', width : "100%"}}>
+			<Suspense fallback={<></>}>
+			<Chess gameCode = "abc" pubKey = "xyz" isHost = "false" practiceGame = "true"></Chess>
+			</Suspense>
+		</div>
+	);
 };
 
 export default App;
