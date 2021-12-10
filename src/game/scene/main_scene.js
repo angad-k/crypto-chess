@@ -12,6 +12,7 @@ import { Colors } from "./utils";
 import { Environment } from "@react-three/drei";
 import { SocketInteraction } from "../../socket";
 import Loader from "react-loader-spinner";
+import { getRandomChessImagePath } from "../../utils/utils";
 extend({ OrbitControls });
 
 const CameraControls = () => {
@@ -135,11 +136,11 @@ const Chess = (props) => {
 					style={{
 						height: "100vh",
 						width: "100%",
-						backgroundImage: "url(/assets/waiting.png)",
+						backgroundImage: getRandomChessImagePath(),
 						backgroundPosition: "center",
 						backgroundSize: "cover",
 						backgroundRepeat: "no-repeat",
-						filter: "blur(4px)",
+						//filter: "blur(0.5px)",
 					}}
 				></div>
 				<div
