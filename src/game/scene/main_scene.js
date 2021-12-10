@@ -184,13 +184,109 @@ const Chess = (props) => {
 		);
 	}
 	if (gameEnded) {
-		return (
-			<div style={{ height: "100vh", width: "100%" }}>
-				Khatam Tata Bye Bye
-				<br></br>
-				{winner} Wins.
-			</div>
-		);
+		if (playerColor == winner) {
+			return (
+				<>
+					<div
+						style={{
+							height: "100vh",
+							width: "100%",
+							backgroundImage: "url(/assets/bg3.jpg)",
+							backgroundPosition: "center",
+							backgroundSize: "cover",
+							backgroundRepeat: "no-repeat",
+							//filter: "blur(0.5px)",
+						}}
+					></div>
+					<div
+						style={{
+							height: "100vh",
+							width: "100%",
+							position: "absolute",
+							display: "flex",
+							alignContent: "center",
+							alignItems: "center",
+							justifyContent: "center",
+							zIndex: 2,
+							top: 0,
+						}}
+					>
+						<span
+							style={{
+								backgroundColor: "rgba(0, 0, 0, 0.5)",
+								padding: 10,
+								borderRadius: "8px",
+								color: "white",
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								flexDirection: "column",
+							}}
+						>
+							<span
+								style={{ marginBottom: 2, textAlign: "center" }}
+							>
+								You win.
+							</span>
+							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+								Claim reward.
+							</button>
+						</span>
+					</div>
+				</>
+			);
+		} else {
+			return (
+				<>
+					<div
+						style={{
+							height: "100vh",
+							width: "100%",
+							backgroundImage: "url(/assets/losebg.jpg)",
+							backgroundPosition: "center",
+							backgroundSize: "cover",
+							backgroundRepeat: "no-repeat",
+							//filter: "blur(0.5px)",
+						}}
+					></div>
+					<div
+						style={{
+							height: "100vh",
+							width: "100%",
+							position: "absolute",
+							display: "flex",
+							alignContent: "center",
+							alignItems: "center",
+							justifyContent: "center",
+							zIndex: 2,
+							top: 0,
+						}}
+					>
+						<span
+							style={{
+								backgroundColor: "rgba(0, 0, 0, 0.0)",
+								padding: 10,
+								borderRadius: "8px",
+								color: "white",
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								flexDirection: "column",
+							}}
+						>
+							<span
+								style={{ marginBottom: 2, textAlign: "center" }}
+							>
+								You lost.
+							</span>
+							<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+								Back
+							</button>
+						</span>
+					</div>
+				</>
+			);
+		}
 	}
 	return (
 		<Suspense fallback={<></>}>
