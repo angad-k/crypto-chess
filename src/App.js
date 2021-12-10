@@ -4,6 +4,7 @@ import Chess from "./build.eth/contracts/Chess.json";
 import { Routes, Route } from "react-router-dom";
 import Store from "./utils/Store";
 import Dashboard from "./pages/Dashboard";
+import Practice from "./pages/Practice";
 
 const App = () => {
   const { setUser } = useContext(Store);
@@ -38,6 +39,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />} />
+      <Route path="/practice" element={<Practice />} />
     </Routes>
   );
 };

@@ -6,6 +6,7 @@ import Img1v1 from "../images/1v1.png";
 import ImgPractice from "../images/practice.png";
 import ImgBetting from "../images/betting.png";
 import { cardCtaStyles } from "../utils/theme";
+import { useNavigate } from "react-router-dom";
 
 const getModal = (showModal, closeModal) => {
   switch (showModal) {
@@ -23,6 +24,7 @@ const getModal = (showModal, closeModal) => {
 const Dashboard = () => {
   const [showModal, setShowModal] = useState("");
   const handleCloseModal = () => setShowModal("");
+  const navigate = useNavigate();
 
   return (
     <div className="bg-dark min-h-screen">
@@ -51,7 +53,14 @@ const Dashboard = () => {
         <DashboardCard
           image={ImgPractice}
           title={"Practice Arena"}
-          cta={<button className={cardCtaStyles}>Start Practice Game</button>}
+          cta={
+            <button
+              className={cardCtaStyles}
+              onClick={() => navigate("../practice")}
+            >
+              Start Practice Game
+            </button>
+          }
         />
         <DashboardCard
           image={ImgBetting}
