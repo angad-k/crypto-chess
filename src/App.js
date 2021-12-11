@@ -19,7 +19,7 @@ const App = () => {
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = ChessContract.networks[networkId];
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+      console.log(deployedNetwork.address)
       const signer = provider.getSigner(accounts[0]);
       const signedContract = new ethers.Contract(
         deployedNetwork.address,
