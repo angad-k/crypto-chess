@@ -9,7 +9,7 @@ import Game1v1 from "./pages/Game1v1";
 import { ethers, providers } from "ethers";
 
 const App = () => {
-  const { setUser} = useContext(Store);
+  const { setUser } = useContext(Store);
 
   const onMount = async () => {
     try {
