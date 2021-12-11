@@ -8,12 +8,14 @@ import { getCoordsFromNotation } from "./coordutils";
 import { Colors } from "./utils";
 import { SocketInteraction } from "../../socket";
 import Loader from "react-loader-spinner";
-import { getRandomChessImagePath } from "../../utils/utils";
+import { getRandomChessImagePath, MSG_DELIM, splitMessage } from "../../utils/utils";
 import Store from "../../utils/Store";
 import { observer } from "mobx-react-lite";
 
 extend({ OrbitControls });
-
+const url = "ws://localhost:4000";
+let onopenCalled = false;
+let interactionSocket
 const CameraControls = () => {
   const {
     camera,
@@ -30,9 +32,7 @@ const CameraControls = () => {
     />
   );
 };
-
 const Chess = (props) => {
-  const interactionSocket = useRef();
 
   const { chess, setChess, resetChessStore } = useContext(Store);
   const {
@@ -47,11 +47,9 @@ const Chess = (props) => {
     winner,
     playerColor,
   } = chess;
-
   useEffect(() => {
     return resetChessStore;
   }, []);
-
   if (!game) {
     let g = new Game();
     setChess({ game: g });
@@ -132,25 +130,67 @@ const Chess = (props) => {
     }
   };
 
-  if (!interactionSocket.current && !props.practiceGame) {
-    let intsoc = new SocketInteraction(
-      props.gameCode,
-      props.pubKey,
-      props.isHost,
-      colorCallback,
-      performMove
-    );
-    interactionSocket.current = intsoc;
-  }
+  if (!interactionSocket && !props.practiceGame) {
+    /*let intsoc =interactionSocket new SocketInteraction(
+			props.gameCode,
+			props.pubKey,
+			props.isHost,
+			colorCallback,
+			performMove
+		);
+		setInteractionSocket(intsoc);*/
+    let s = new WebSocket(url);
+	s.onopen = () => {
+		if (!onopenCalled) {
+		  onopenCalled = true;
+		  console.log("onopen called");
+		  if (props.isHost) {
+			s.send(
+			  `new_game${MSG_DELIM}${props.pubKey}${MSG_DELIM}${props.gameCode}`
+			);
+		  } else {
+			s.send(
+			  `join_game${MSG_DELIM}${props.pubKey}${MSG_DELIM}${props.gameCode}`
+			);
+		  }
+		}
+	  };
+	  s.onmessage = (event) => {
+		console.log("game", game)
+		console.log("something called", event);
+		let msg = event.data;
+		let [cmd, arg] = splitMessage(msg);
+		switch (cmd) {
+		  case "color": {
+			console.log("color callback : " + arg);
+			colorCallback(arg);
+			break;
+		  }
+		  case "opponent_move": {
+			let [from, to] = splitMessage(arg);
+			console.log("opponent_move from " + from + " to " + to);
+			if(game.moves(from).includes(to))
+			{
+				performMove(from, to);
+			}
+			break;
+		  }
+		  default: {
+			//do nothing
+		  }
+		}
+	  };
+	  interactionSocket = s
+	}
 
   if (props.practiceGame && !gameStarted) {
     setChess({ gameStarted: true, playerColor: Colors.WHITE });
   }
 
   const handleBlockClick = (n) => {
-    performMove(selectedPiece, n);
+	performMove(selectedPiece, n);
     if (!props.practiceGame) {
-      interactionSocket.current.makeMove(selectedPiece, n);
+	  interactionSocket.send(`move${MSG_DELIM}${props.gameCode}${MSG_DELIM}${selectedPiece}${MSG_DELIM}${n}`);
     } else {
       let m = game.aiMove();
       for (var from in m) {

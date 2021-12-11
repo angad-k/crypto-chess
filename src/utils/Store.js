@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { createContext } from "react";
 import initialPositions from "../game/scene/positions";
+import { Game } from "js-chess-engine";
 
 const initialChessStore = {
   positions: initialPositions,
@@ -8,7 +9,7 @@ const initialChessStore = {
   selectedPiece: null,
   blackSideCoord: [0, -1],
   whiteSideCoord: [0, 8],
-  game: null,
+  game: new Game(),
   gameEnded: false,
   gameStarted: false,
   winner: null,
