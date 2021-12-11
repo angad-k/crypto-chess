@@ -65,7 +65,14 @@ const Dashboard = () => {
         <DashboardCard
           image={ImgBetting}
           title={"Live Betting"}
-          cta={<button className={cardCtaStyles}>Place Bet</button>}
+          cta={
+            <button
+              className={cardCtaStyles}
+              onClick={() => navigate("../bet-lobby")}
+            >
+              Place Bet
+            </button>
+          }
         />
         {getModal(showModal, handleCloseModal)}
       </div>

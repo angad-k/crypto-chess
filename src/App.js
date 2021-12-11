@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import Store from "./utils/Store";
 import Dashboard from "./pages/Dashboard";
 import Practice from "./pages/Practice";
+import BettingLobby from "./pages/BettingLobby";
 
 const App = () => {
   const { setUser } = useContext(Store);
@@ -40,6 +41,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Dashboard />} />
       <Route path="/practice" element={<Practice />} />
+      <Route path="/bet-lobby" element={<BettingLobby />} />
     </Routes>
   );
 };

@@ -9,7 +9,7 @@ export const cardCtaStyles =
     "outline-none bg-b2 bg-opacity-10 rounded px-4 py-2 w-full mb-6";
 
   export const modalPrimaryCtaStyles =
-    "bg-b2 rounded-full px-8 py-2 text-white text-center font-medium";
+    "bg-b2 rounded-full px-8 py-2 text-white text-center font-medium hover:bg-b1 transition";
 
   export const modalSecCtaStyles =
-    "bg-white rounded-full px-8 py-2 text-b2 text-center font-medium border border-b2";
+    "bg-white rounded-full px-8 py-2 text-b2 text-center font-medium border border-b2 hover:bg-b2 hover:bg-opacity-10 transition";
