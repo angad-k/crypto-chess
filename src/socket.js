@@ -1,6 +1,6 @@
 import { MSG_DELIM, splitMessage } from "./utils/utils";
 
-const url = "test";
+const url = "ws://localhost:4000";
 
 export class SocketInteraction {
   constructor(gameCode, pubKey, isHost, colorCallback, opponentMoveCallback) {
