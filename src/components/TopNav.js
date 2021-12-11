@@ -2,12 +2,11 @@ import { observer } from "mobx-react-lite";
 import { useContext } from "react";
 import Store from "../utils/Store";
 import logo from "../images/logo.png";
-
-const get_avatar_url = (seed) =>
-  `https://avatars.dicebear.com/api/human/${seed}.svg`;
+import { truncatePubKey, get_avatar_url } from "../utils/utils";
 
 const TopNav = () => {
   const { user } = useContext(Store);
+  const publickKey = truncatePubKey(user.accounts);
   const avatar_url = get_avatar_url(user.accounts);
 
   return (
@@ -17,8 +16,8 @@ const TopNav = () => {
         <p className="ml-4 text-sm font-medium">Dashboard</p>
       </div>
       <div className="flex gap-1 items-center">
-        <p className="truncate w-28 text-white font-medium opacity-75 text-sm">
-          {user.accounts}
+        <p className="text-white font-medium opacity-75 text-sm bg-b1 rounded-full py-1 px-2">
+          {publickKey}
         </p>
         <div className="p-2 rounded-full bg-dark">
           <img className="h-8" alt="avatar" src={avatar_url} />

@@ -7,9 +7,10 @@ import Dashboard from "./pages/Dashboard";
 import Practice from "./pages/Practice";
 import Game1v1 from "./pages/Game1v1";
 import { ethers, providers } from "ethers";
+import BettingLobby from "./pages/BettingLobby";
 
 const App = () => {
-  const { setUser} = useContext(Store);
+  const { setUser } = useContext(Store);
 
   const onMount = async () => {
     try {
@@ -18,11 +19,19 @@ const App = () => {
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = ChessContract.networks[networkId];
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      
-      const signer = provider.getSigner(accounts[0]);
-      const signedContract = new ethers.Contract(deployedNetwork.address, ChessContract.abi, signer);
-      setUser({ web3: web3, accounts: accounts[0], signedContract:signedContract, provider:provider });
 
+      const signer = provider.getSigner(accounts[0]);
+      const signedContract = new ethers.Contract(
+        deployedNetwork.address,
+        ChessContract.abi,
+        signer
+      );
+      setUser({
+        web3: web3,
+        accounts: accounts[0],
+        signedContract: signedContract,
+        provider: provider,
+      });
     } catch (error) {
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`
@@ -37,10 +46,11 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path="/createGame/:gameCode" element={<Game1v1 type="Create"/>}/>
-      <Route path="/joinGame/:gameCode" element={<Game1v1 type="Join"/>}/>
+      <Route path="/createGame/:gameCode" element={<Game1v1 type="Create" />} />
+      <Route path="/joinGame/:gameCode" element={<Game1v1 type="Join" />} />
       <Route path="/" element={<Dashboard />} />
       <Route path="/practice" element={<Practice />} />
+      <Route path="/bet-lobby" element={<BettingLobby />} />
     </Routes>
   );
 };

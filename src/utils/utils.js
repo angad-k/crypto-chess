@@ -12,3 +12,11 @@ export const getRandomChessImagePath = () => {
 	let i = Math.floor(Math.random() * 5);
 	return "url(/assets/bg" + i + ".jpg)";
 };
+
+export const truncatePubKey = (key) => {
+  if (!key) return "";
+  return key.substring(0, 5) + "..." + key.substring(key.length - 4);
+};
+
+export const get_avatar_url = (seed) =>
+  `https://avatars.dicebear.com/api/human/${seed}.svg`;
