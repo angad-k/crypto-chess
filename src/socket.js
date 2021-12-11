@@ -18,6 +18,7 @@ export class SocketInteraction {
 						`join_game${MSG_DELIM}${pubKey}${MSG_DELIM}${this.gameCode}`
 					);
 				}
+        onopenCalled=true;
 			}
 		};
 		this.s.onmessage = (event) => {
@@ -37,6 +38,6 @@ export class SocketInteraction {
 		};
 	}
 	makeMove(from, to) {
-		this.s.send(`move${MSG_DELIM}${from}${MSG_DELIM}${to}`);
+		this.s.send(`move${MSG_DELIM}${this.gameCode}${MSG_DELIM}${from}${MSG_DELIM}${to}`);
 	}
 }

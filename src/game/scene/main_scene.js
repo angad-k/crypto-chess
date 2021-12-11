@@ -69,6 +69,7 @@ const Chess = (props) => {
   };
 
   const performMove = (from, to, aiDone = false) => {
+	  console.log(game+","+from+to+aiDone);
     const fromCoordinates = getCoordsFromNotation(from);
     const toCoordinates = getCoordsFromNotation(to);
     let newpositions = positions.map((x, i) => {
