@@ -1,7 +1,7 @@
 import { get_avatar_url, truncatePubKey } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
 
-const ActiveGames = ({ p1, p2, bidders, highest_bid, game_code }) => {
+const ActiveGames = ({ p1, p2, bidOnp1, bidOnp2, game_code }) => {
   const p1Avatar = get_avatar_url(p1);
   const p2Avatar = get_avatar_url(p2);
 
@@ -30,11 +30,12 @@ const ActiveGames = ({ p1, p2, bidders, highest_bid, game_code }) => {
       </div>
       <div className="flex justify-between px-6 py-3 bg-b2">
         <p className="text-sm text-white">
-          Highest Bid
-          <span className="text-2xl ml-2">{highest_bid}</span>
+          Bid amt
+          <span className="text-2xl ml-2">{bidOnp1}</span>
         </p>
         <p className="text-sm">
-          Bidders <span className="text-2xl ml-2">{bidders}</span>
+          Bid amt
+          <span className="text-2xl ml-2">{bidOnp2}</span>
         </p>
       </div>
     </div>
