@@ -1,5 +1,8 @@
+import { useContext, useEffect } from "react";
 import TopNav from "../components/TopNav";
+import Store from "../utils/Store";
 import ActiveGames from "./ActiveGames";
+import { toJS } from "mobx";
 
 const dummyData = [
   {
@@ -19,6 +22,26 @@ const dummyData = [
 ];
 
 const BettingLobby = () => {
+  const { user } = useContext(Store);
+  console.log(toJS(user));
+
+  const fetchActiveGames = async () => {
+    if (!user.signedContract) return null;
+    let activeGames = [];
+
+    const latestGameId = await user.signedContract.getLatestGameId();
+    for (let i = 0; i < latestGameId; i++) {
+      const game = await user.signedContract.getGame(i);
+      if (!game.finished) activeGames.push(game);
+    }
+    console.log(activeGames);
+    return activeGames;
+  };
+
+  useEffect(() => {
+    fetchActiveGames().then((games) => console.log(games));
+  });
+
   return (
     <div className="bg-dark h-screen overflow-y-auto">
       <TopNav />
