@@ -51,6 +51,7 @@ const App = () => {
       <Route path="/" element={<Dashboard />} />
       <Route path="/practice" element={<Practice />} />
       <Route path="/bet-lobby" element={<BettingLobby />} />
+      <Route path="/stream/:gameCode" element={} />
     </Routes>
   );
 };
