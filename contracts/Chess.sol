@@ -78,16 +78,8 @@ contract Chess {
         return games;
     }
 
-    function getAvailableGames() public view returns (uint256[] memory) {
-        uint256[] memory games;
-        Game memory g;
-        uint256 count = 0;
-        for (uint256 i = 1568; i < gameID; i++) {
-            g = GameInfo[i];
-            games[count] = i;
-            count++;
-        }
-        return games;
+    function getLatestGameId() public view returns (uint256) {
+        return gameID;
     }
 
     function getGame(uint256 game) public view returns (Game memory) {

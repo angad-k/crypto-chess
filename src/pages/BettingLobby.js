@@ -1,6 +1,10 @@
 import TopNav from "../components/TopNav";
 import ActiveGames from "./ActiveGames";
-
+import { useEffect } from "react";
+import { useContext } from "react";
+import { observer } from "mobx-react-lite";
+import Store from "../utils/Store";
+import { toJS } from "mobx";
 const dummyData = [
   {
     p1: "0x2698Dd3baabDFd0c7FaD64683b16fDA669639E2eF",
@@ -19,6 +23,23 @@ const dummyData = [
 ];
 
 const BettingLobby = () => {
+  const {user} = useContext(Store);
+  
+  var games = [];
+
+  if(user.signedContract){
+    var allgames=user.signedContract.getGames() //<=await yahan 
+    (allgames || []).forEach(gameID => {
+      let game=user.signedContract.getGame(parseInt(gameID)); //<=await yahan 
+      games.push(game)
+    });
+    console.log(games)
+  }
+
+  useEffect(()=>{
+    
+  },[])
+
   return (
     <div className="bg-dark h-screen overflow-y-auto">
       <TopNav />
@@ -31,4 +52,4 @@ const BettingLobby = () => {
   );
 };
 
-export default BettingLobby;
+export default observer(BettingLobby);
