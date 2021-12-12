@@ -41,8 +41,8 @@ const BettingLobby = () => {
         var gg={
           p1:game.player1,
           p2:game.player1,
-          bidOnp1:60,
-          bidOnp2:66,
+          bidOnp1:2+Math.floor(Math.random() * 50),
+          bidOnp2:2+Math.floor(Math.random() * 50),
           game_code: i,
         }
         activeGames.push(gg);
