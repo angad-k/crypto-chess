@@ -8,6 +8,7 @@ import Practice from "./pages/Practice";
 import Game1v1 from "./pages/Game1v1";
 import { ethers, providers } from "ethers";
 import BettingLobby from "./pages/BettingLobby";
+import Stream from "./pages/Stream";
 
 const App = () => {
   const { setUser } = useContext(Store);
@@ -51,7 +52,7 @@ const App = () => {
       <Route path="/" element={<Dashboard />} />
       <Route path="/practice" element={<Practice />} />
       <Route path="/bet-lobby" element={<BettingLobby />} />
-      <Route path="/stream/:gameCode" element={} />
+      <Route path="/stream/:gameCode" element={<Stream />} />
     </Routes>
   );
 };
