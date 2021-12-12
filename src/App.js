@@ -8,6 +8,8 @@ import Practice from "./pages/Practice";
 import Game1v1 from "./pages/Game1v1";
 import { ethers, providers } from "ethers";
 import BettingLobby from "./pages/BettingLobby";
+import Stream from "./pages/Stream";
+import BettingPanel from "./pages/BettingPanel";
 
 const App = () => {
   const { setUser } = useContext(Store);
@@ -19,7 +21,7 @@ const App = () => {
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = ChessContract.networks[networkId];
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+      console.log(deployedNetwork.address);
       const signer = provider.getSigner(accounts[0]);
       const signedContract = new ethers.Contract(
         deployedNetwork.address,
@@ -51,6 +53,8 @@ const App = () => {
       <Route path="/" element={<Dashboard />} />
       <Route path="/practice" element={<Practice />} />
       <Route path="/bet-lobby" element={<BettingLobby />} />
+      <Route path="/stream/:gameCode" element={<Stream />} />
+      <Route path="/test" element={<BettingPanel />} />
     </Routes>
   );
 };
