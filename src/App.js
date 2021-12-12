@@ -6,10 +6,11 @@ import Store from "./utils/Store";
 import Dashboard from "./pages/Dashboard";
 import Practice from "./pages/Practice";
 import Game1v1 from "./pages/Game1v1";
-import { ethers, providers } from "ethers";
+import { ethers } from "ethers";
 import BettingLobby from "./pages/BettingLobby";
 import Stream from "./pages/Stream";
 import BettingPanel from "./pages/BettingPanel";
+
 
 const App = () => {
   const { setUser } = useContext(Store);
