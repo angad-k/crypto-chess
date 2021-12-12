@@ -3,6 +3,7 @@ import TopNav from "../components/TopNav";
 import Store from "../utils/Store";
 import ActiveGames from "./ActiveGames";
 import { toJS } from "mobx";
+import { observer } from "mobx-react-lite";
 
 const dummyData = [
   {
@@ -39,7 +40,8 @@ const BettingLobby = () => {
   };
 
   useEffect(() => {
-    fetchActiveGames().then((games) => console.log(games));
+    const games = fetchActiveGames();
+    console.log(games);
   });
 
   return (
@@ -54,4 +56,4 @@ const BettingLobby = () => {
   );
 };
 
-export default BettingLobby;
+export default observer(BettingLobby);
