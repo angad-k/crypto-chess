@@ -1,10 +1,13 @@
+import { useContext, useEffect } from "react";
 import TopNav from "../components/TopNav";
+import Store from "../utils/Store";
 import ActiveGames from "./ActiveGames";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import Store from "../utils/Store";
 import { toJS } from "mobx";
+
 const dummyData = [
   {
     p1: "0x2698Dd3baabDFd0c7FaD64683b16fDA669639E2eF",
@@ -23,22 +26,26 @@ const dummyData = [
 ];
 
 const BettingLobby = () => {
-  const {user} = useContext(Store);
-  
-  var games = [];
+  const { user } = useContext(Store);
+  console.log(toJS(user));
 
-  if(user.signedContract){
-    var allgames=user.signedContract.getGames() //<=await yahan 
-    (allgames || []).forEach(gameID => {
-      let game=user.signedContract.getGame(parseInt(gameID)); //<=await yahan 
-      games.push(game)
-    });
-    console.log(games)
-  }
+  const fetchActiveGames = async () => {
+    if (!user.signedContract) return null;
+    let activeGames = [];
 
-  useEffect(()=>{
-    
-  },[])
+    const latestGameId = await user.signedContract.getLatestGameId();
+    for (let i = 0; i < latestGameId; i++) {
+      const game = await user.signedContract.getGame(i);
+      if (!game.finished) activeGames.push(game);
+    }
+    console.log(activeGames);
+    return activeGames;
+  };
+
+  useEffect(() => {
+    const games = fetchActiveGames();
+    console.log(games);
+  });
 
   return (
     <div className="bg-dark h-screen overflow-y-auto">
