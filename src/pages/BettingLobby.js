@@ -4,6 +4,7 @@ import Store from "../utils/Store";
 import ActiveGames from "./ActiveGames";
 import { observer } from "mobx-react-lite";
 import { toJS } from "mobx";
+import Loader from "react-loader-spinner";
 
 const dummyData = [
   {
@@ -38,13 +39,13 @@ const BettingLobby = () => {
     for (let i = 1568; i < latestGameId; i++) {
       const game = await user.signedContract.getGame(i);
       if (!game.finished) {
-        var gg={
-          p1:game.player1,
-          p2:game.player1,
-          bidOnp1:2+Math.floor(Math.random() * 50),
-          bidOnp2:2+Math.floor(Math.random() * 50),
+        var gg = {
+          p1: game.player1,
+          p2: game.player1,
+          bidOnp1: 2 + Math.floor(Math.random() * 50),
+          bidOnp2: 2 + Math.floor(Math.random() * 50),
           game_code: i,
-        }
+        };
         activeGames.push(gg);
       }
     }
@@ -62,9 +63,15 @@ const BettingLobby = () => {
     <div className="bg-dark h-screen overflow-y-auto">
       <TopNav />
       <div>
-        {dummyData.map((game) => (
-          <ActiveGames key={game.game_code} {...game} />
-        ))}
+        {activeGames.length > 0 ? (
+          activeGames.map((game) => (
+            <ActiveGames key={game.game_code} {...game} />
+          ))
+        ) : (
+          <div className="w-max mx-auto pt-10">
+            <Loader type="Puff" color="#00BFFF" height={25} width={25} />
+          </div>
+        )}
       </div>
     </div>
   );
