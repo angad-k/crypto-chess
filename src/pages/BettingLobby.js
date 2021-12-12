@@ -38,7 +38,14 @@ const BettingLobby = () => {
     for (let i = 1568; i < latestGameId; i++) {
       const game = await user.signedContract.getGame(i);
       if (!game.finished) {
-        activeGames.push(game);
+        var gg={
+          p1:game.player1,
+          p2:game.player1,
+          bidOnp1:60,
+          bidOnp2:66,
+          game_code: i,
+        }
+        activeGames.push(gg);
       }
     }
     setActiveGames(activeGames);

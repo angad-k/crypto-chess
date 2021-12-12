@@ -88,6 +88,13 @@ contract Chess {
         return requestedGame;
     }
 
+    function getBet(uint256 game) public view returns (Bet memory) {
+        Bet memory requestedGame;
+        requestedGame = BetInfo[game];
+        return requestedGame;
+    }
+
+
     function checkPlayer(address player, uint256 game)
         private
         view
