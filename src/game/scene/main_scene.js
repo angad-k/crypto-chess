@@ -6,7 +6,6 @@ import Setup from "./setup";
 import { Game } from "js-chess-engine";
 import { getCoordsFromNotation } from "./coordutils";
 import { Colors } from "./utils";
-import { SocketInteraction } from "../../socket";
 import Loader from "react-loader-spinner";
 import {
 	getRandomChessImagePath,
@@ -139,7 +138,7 @@ const Chess = (props) => {
 	};
 
 	if (!interactionSocket && !props.practiceGame) {
-		/*let intsoc =interactionSocket new SocketInteraction(
+		/*let intsoc =interactiofnSocket new SocketInteraction(
 			props.gameCode,
 			props.pubKey,
 			props.isHost,
