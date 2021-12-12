@@ -2,8 +2,11 @@ import { useContext, useEffect } from "react";
 import TopNav from "../components/TopNav";
 import Store from "../utils/Store";
 import ActiveGames from "./ActiveGames";
-import { toJS } from "mobx";
+import { useEffect } from "react";
+import { useContext } from "react";
 import { observer } from "mobx-react-lite";
+import Store from "../utils/Store";
+import { toJS } from "mobx";
 
 const dummyData = [
   {
