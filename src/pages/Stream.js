@@ -16,6 +16,7 @@ import {
 	MSG_DELIM,
 	splitMessage,
 } from "../utils/utils";
+import { observer } from "mobx-react-lite";
 import { Canvas, useFrame, useThree } from "react-three-fiber";
 import Board from "../game/scene/board";
 import Setup from "../game/scene/setup";
@@ -40,10 +41,16 @@ const url = "ws://localhost:4000";
 let s = new WebSocket(url);
 let onopenCalled = false;
 // const currPos = [];
-const Stream = (props) => {
+const Stream = observer((props) => {
+	const params = useParams();
+	const {user} = useContext(Store);
 	const [placeholder, setPlaceholder] = useState(false);
 	const [pos_set, setpos_set] = useState(false);
 	const { chess, setChess, resetChessStore } = useContext(Store);
+	const {pubkeys,setPubkeys} = useState({
+		white:null,
+		black:null
+	});
 	const {
 		positions,
 		activeBlocks,
@@ -59,7 +66,18 @@ const Stream = (props) => {
 	useEffect(() => {
 		return resetChessStore;
 	}, []);
-
+	const betBlack = async() => {
+		var stake=document.getElementById("bet").value;
+		var res=await user.signedContract.bet(pubkeys.black,params.gameCode,{value:parseInt(stake)})
+		console.log(res)
+		alert("Bet Successful")
+	}
+	const betWhite = async() => {
+		var stake=document.getElementById("bet").value;
+		var res=await user.signedContract.bet(pubkeys.white,params.gameCode,{value:parseInt(stake)})
+		console.log(res)
+		alert("Bet Successful")
+	}
 	const performMove = (from, to, aiDone = false) => {
 		const fromCoordinates = getCoordsFromNotation(from);
 		console.log("fromC = " + fromCoordinates);
@@ -110,8 +128,6 @@ const Stream = (props) => {
 			activeBlocks: [],
 		});
 	};
-
-	const params = useParams();
 
 	function updateBoard(fen) {
 		let currPos = [];
@@ -269,9 +285,15 @@ const Stream = (props) => {
 				break;
 			case "init_game":
 				//set board
-				let [gg, f] = splitMessage(arg);
+				let [gg, extra] = splitMessage(arg);
+				let [f,extra2] = splitMessage(extra);
+				let[white,black] = splitMessage(extra2)
 				if (gg == params.gameCode) {
 					updateBoard(f);
+					setPubkeys({
+						white:white,
+						black:black
+					});
 					console.log(f);
 					console.log(positions);
 				}
@@ -307,8 +329,13 @@ const Stream = (props) => {
 					/>
 				</group>
 			</Canvas>
+			<div>
+				<input type="text" name="" id="bet" />
+				<button onClick={betBlack}>Black</button>
+				<button onClick={betWhite}>White</button>
+			</div>
 		</Suspense>
 	);
-};
+});
 
 export default Stream;
