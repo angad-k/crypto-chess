@@ -43,14 +43,10 @@ let onopenCalled = false;
 // const currPos = [];
 const Stream = observer((props) => {
 	const params = useParams();
-	const {user} = useContext(Store);
+	const {user,streamPubkeys,setStreamPubkeys,resetStreamPubkeys} = useContext(Store);
 	const [placeholder, setPlaceholder] = useState(false);
 	const [pos_set, setpos_set] = useState(false);
 	const { chess, setChess, resetChessStore } = useContext(Store);
-	const {pubkeys,setPubkeys} = useState({
-		white:null,
-		black:null
-	});
 	const {
 		positions,
 		activeBlocks,
@@ -66,15 +62,24 @@ const Stream = observer((props) => {
 	useEffect(() => {
 		return resetChessStore;
 	}, []);
+	const {
+		whitePubkey,
+		blackPubkey
+	} = streamPubkeys;
+	useEffect(() => {
+		return resetStreamPubkeys;
+	}, []);
 	const betBlack = async() => {
 		var stake=document.getElementById("bet").value;
-		var res=await user.signedContract.bet(pubkeys.black,params.gameCode,{value:parseInt(stake)})
+		console.log(parseInt(stake))
+		var res=await user.signedContract.bet(blackPubkey,params.gameCode,{value:parseInt(stake)})
 		console.log(res)
 		alert("Bet Successful")
 	}
 	const betWhite = async() => {
 		var stake=document.getElementById("bet").value;
-		var res=await user.signedContract.bet(pubkeys.white,params.gameCode,{value:parseInt(stake)})
+		console.log(parseInt(stake))
+		var res=await user.signedContract.bet(whitePubkey,params.gameCode,{value:parseInt(stake)})
 		console.log(res)
 		alert("Bet Successful")
 	}
@@ -290,12 +295,14 @@ const Stream = observer((props) => {
 				let[white,black] = splitMessage(extra2)
 				if (gg == params.gameCode) {
 					updateBoard(f);
-					setPubkeys({
+					console.log(white,black)
+					setStreamPubkeys({
 						white:white,
 						black:black
-					});
+					  })
 					console.log(f);
 					console.log(positions);
+					console.log(whitePubkey,blackPubkey)
 				}
 				break;
 			default:

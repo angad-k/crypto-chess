@@ -15,7 +15,10 @@ const initialChessStore = {
   winner: null,
   playerColor: null,
 };
-
+const initialStreamPubkeys = {
+  white:null,
+  black:null
+};
 class Store {
   constructor() {
     makeAutoObservable(this);
@@ -23,7 +26,7 @@ class Store {
 
   user = {};
   chess = initialChessStore;
-
+  streamPubkeys = initialStreamPubkeys;
   setUser = (user) => {
     this.user = user;
   };
@@ -32,7 +35,13 @@ class Store {
     const old_chess = this.chess;
     this.chess = { ...old_chess, ...chess };
   };
-
+  setStreamPubkeys = (streamPubkeys) =>{
+    const old_keys = this.streamPubkeys;
+    this.streamPubkeys = { ...old_keys, ...streamPubkeys };
+  }
+  resetStreamPubkeys = () => {
+    this.streamPubkeys = initialStreamPubkeys;
+  };
   resetChessStore = () => {
     this.chess = initialChessStore;
   };
