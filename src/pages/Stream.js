@@ -41,6 +41,7 @@ let s = new WebSocket(url);
 let onopenCalled = false;
 // const currPos = [];
 const Stream = (props) => {
+	const [placeholder, setPlaceholder] = useState(false);
 	const [pos_set, setpos_set] = useState(false);
 	const { chess, setChess, resetChessStore } = useContext(Store);
 	const {
@@ -227,8 +228,8 @@ const Stream = (props) => {
 		}
 		setChess({
 			positions: currPos,
-			playerColor: 3 ? 4 : 3,
 		});
+		setPlaceholder(!placeholder);
 		setpos_set(true);
 		console.log(currPos);
 	}
@@ -262,7 +263,8 @@ const Stream = (props) => {
 					updateBoard(fen);
 					console.log(fen);
 					console.log(positions);
-					window.location.reload();
+					console.log("message aya");
+					//window.location.reload();
 				}
 				break;
 			case "init_game":
@@ -277,6 +279,7 @@ const Stream = (props) => {
 			default:
 		}
 	};
+	console.log("rendered");
 	console.log("positions = ");
 	console.log(positions);
 	return (
