@@ -21,6 +21,7 @@
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "react-three-fiber": "^6.0.13",
+    "tailwind-scrollbar-hide": "^1.1.6",
     "three": "^0.135.0",
     "truffle": "^5.4.23",
     "web3": "^1.6.1"
