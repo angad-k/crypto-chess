@@ -5,6 +5,7 @@ import Piece, { Models } from "./piece";
 
 const Setup = (props) => {
 	//onsole.log(initialPositions.length);
+	console.log(props.positions);
 	return props.positions.map((position, i) => {
 		return (
 			<Piece

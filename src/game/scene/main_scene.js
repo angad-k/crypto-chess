@@ -6,7 +6,12 @@ import Setup from "./setup";
 import { Game } from "js-chess-engine";
 import { getCoordsFromNotation } from "./coordutils";
 import { Colors } from "./utils";
-import { MSG_DELIM, splitMessage } from "../../utils/utils";
+import Loader from "react-loader-spinner";
+import {
+	getRandomChessImagePath,
+	MSG_DELIM,
+	splitMessage,
+} from "../../utils/utils";
 import Store from "../../utils/Store";
 import { observer } from "mobx-react-lite";
 import WaitingPage from "../../pages/WaitingPage";
