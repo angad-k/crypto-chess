@@ -22,6 +22,7 @@ import Board from "../game/scene/board";
 import Setup from "../game/scene/setup";
 import { getCoordsFromNotation } from "../game/scene/coordutils";
 import { ethers } from "ethers";
+import BettingPanel from "./BettingPanel";
 const CameraControls = () => {
 	const {
 		camera,
@@ -70,18 +71,6 @@ const Stream = observer((props) => {
 	useEffect(() => {
 		return resetStreamPubkeys;
 	}, []);
-	const betBlack = async() => {
-		var stake=document.getElementById("bet").value;
-		var res=await user.signedContract.bet(blackPubkey,params.gameCode,{value:ethers.utils.parseEther(stake)})
-		console.log(res)
-		alert("Bet Successful")
-	}
-	const betWhite = async() => {
-		var stake=document.getElementById("bet").value;
-		var res=await user.signedContract.bet(whitePubkey,params.gameCode,{value:ethers.utils.parseEther(stake)})
-		console.log(res)
-		alert("Bet Successful")
-	}
 	const performMove = (from, to, aiDone = false) => {
 		const fromCoordinates = getCoordsFromNotation(from);
 		console.log("fromC = " + fromCoordinates);
@@ -335,11 +324,7 @@ const Stream = observer((props) => {
 					/>
 				</group>
 			</Canvas>
-			<div>
-				<input type="text" name="" id="bet" />
-				<button onClick={betBlack}>Black</button>
-				<button onClick={betWhite}>White</button>
-			</div>
+			<BettingPanel blackPubkey={blackPubkey} whitePubkey={whitePubkey} gameCode={params.gameCode}/>
 		</Suspense>
 	);
 });
