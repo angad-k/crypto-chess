@@ -25,6 +25,7 @@ import { ethers } from "ethers";
 import BettingPanel from "./BettingPanel";
 import { webSocketURL } from "../utils/const";
 import Chat from "../components/Chat";
+import ModalSuperChat from "../components/ModalSuperChat";
 const CameraControls = () => {
 	const {
 		camera,
@@ -46,6 +47,8 @@ let s = new WebSocket(url);
 let onopenCalled = false;
 // const currPos = [];
 const Stream = observer((props) => {
+	const [showModal, setShowModal] = useState(false);
+	const handleCloseModal = () => setShowModal(false);
 	const params = useParams();
 	const { user } = useContext(Store);
 	const [placeholder, setPlaceholder] = useState(false);
@@ -338,8 +341,14 @@ const Stream = observer((props) => {
 					gameCode={params.gameCode}
 					isBlack={false}
 					isWhite={false}
+					setShowModal={setShowModal}
 				/>
 			</div>
+			{showModal ? (
+				<ModalSuperChat closeModal={handleCloseModal} />
+			) : (
+				<> </>
+			)}
 		</>
 	);
 });

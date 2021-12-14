@@ -1,1 +1,1 @@
-export const webSocketURL = "ws://10.61.6.58:4000";
+export const webSocketURL = "ws://localhost:4000";
