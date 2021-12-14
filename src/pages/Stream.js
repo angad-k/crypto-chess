@@ -21,6 +21,7 @@ import { Canvas, useFrame, useThree } from "react-three-fiber";
 import Board from "../game/scene/board";
 import Setup from "../game/scene/setup";
 import { getCoordsFromNotation } from "../game/scene/coordutils";
+import { ethers } from "ethers";
 const CameraControls = () => {
 	const {
 		camera,
@@ -71,15 +72,13 @@ const Stream = observer((props) => {
 	}, []);
 	const betBlack = async() => {
 		var stake=document.getElementById("bet").value;
-		console.log(parseInt(stake))
-		var res=await user.signedContract.bet(blackPubkey,params.gameCode,{value:parseInt(stake)})
+		var res=await user.signedContract.bet(blackPubkey,params.gameCode,{value:ethers.utils.parseEther(stake)})
 		console.log(res)
 		alert("Bet Successful")
 	}
 	const betWhite = async() => {
 		var stake=document.getElementById("bet").value;
-		console.log(parseInt(stake))
-		var res=await user.signedContract.bet(whitePubkey,params.gameCode,{value:parseInt(stake)})
+		var res=await user.signedContract.bet(whitePubkey,params.gameCode,{value:ethers.utils.parseEther(stake)})
 		console.log(res)
 		alert("Bet Successful")
 	}
