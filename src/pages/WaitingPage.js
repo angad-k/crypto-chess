@@ -13,12 +13,6 @@ const WaitingPage = () => (
 			<Loader type="Puff" color="#00BFFF" height={25} width={25} />
 			<p className="mt-5">Waiting for other players to join</p>
 		</div>
-		<Chat
-			pubKey="aaaaaaaa"
-			gameCode="1124"
-			isBlack={false}
-			isWhite={true}
-		/>
 	</div>
 );
 

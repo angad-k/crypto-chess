@@ -16,9 +16,12 @@ import Store from "../../utils/Store";
 import { observer } from "mobx-react-lite";
 import WaitingPage from "../../pages/WaitingPage";
 import WinLostPage from "../../pages/WinLostPage";
+import Chat from "../../components/Chat";
+import { Color } from "three";
+import { webSocketURL } from "../../utils/const";
 
 extend({ OrbitControls });
-const url = "ws://localhost:4000";
+const url = webSocketURL;
 let onopenCalled = false;
 let interactionSocket;
 const CameraControls = () => {
@@ -240,37 +243,47 @@ const Chess = (props) => {
 	}
 
 	return (
-		<Suspense fallback={<></>}>
-			<Canvas
-				gl={{ antialias: true }}
-				dpr={Math.max(window.devicePixelRatio, 2)}
-			>
-				<CameraControls />
-				<group
-					rotation={[
-						0,
-						0,
-						playerColor === Colors.BLACK ? Math.PI : 0,
-					]}
+		<>
+			<Suspense fallback={<></>}>
+				<Canvas
+					gl={{ antialias: true }}
+					dpr={Math.max(window.devicePixelRatio, 2)}
 				>
-					<ambientLight />
-					<pointLight position={[4.5, 4.5, 20]} />
-					<pointLight position={[-4.5, -4.5, 20]} />
-					<pointLight position={[4.5, -4.5, 20]} />
-					<pointLight position={[-4.5, 4.5, 20]} />
-					<Board
-						active={activeBlocks}
-						handleBlockClick={handleBlockClick}
-						playerColor={playerColor}
-					/>
-					<Setup
-						positions={positions}
-						handlePieceClick={handlePieceClick}
-						playerColor={playerColor}
-					/>
-				</group>
-			</Canvas>
-		</Suspense>
+					<CameraControls />
+					<group
+						rotation={[
+							0,
+							0,
+							playerColor === Colors.BLACK ? Math.PI : 0,
+						]}
+					>
+						<ambientLight />
+						<pointLight position={[4.5, 4.5, 20]} />
+						<pointLight position={[-4.5, -4.5, 20]} />
+						<pointLight position={[4.5, -4.5, 20]} />
+						<pointLight position={[-4.5, 4.5, 20]} />
+						<Board
+							active={activeBlocks}
+							handleBlockClick={handleBlockClick}
+							playerColor={playerColor}
+						/>
+						<Setup
+							positions={positions}
+							handlePieceClick={handlePieceClick}
+							playerColor={playerColor}
+						/>
+					</group>
+				</Canvas>
+			</Suspense>
+			<div className="fixed bottom-10 right-10 ">
+				<Chat
+					pubKey={props.pubKey}
+					gameCode={props.gameCode}
+					isBlack={playerColor == Colors.BLACK}
+					isWhite={playerColor == Colors.WHITE}
+				/>
+			</div>
+		</>
 	);
 };
 

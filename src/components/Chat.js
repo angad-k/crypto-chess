@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { webSocketURL } from "../utils/const";
 import { MSG_DELIM, splitMessage, truncatePubKey } from "../utils/utils";
-const url = "ws://localhost:4000";
+const url = webSocketURL;
 const Message = (props) => {
 	return (
 		<>
@@ -84,16 +85,16 @@ const Chat = (props) => {
 					onClick={() => {
 						setOpened(true);
 					}}
-					className="fixed bottom-10 right-10 bg-b2  p-5 text-white rounded-full flex-row flex cursor-pointer justify-center"
+					className="bg-b2  p-3 w-400 text-white rounded-xl flex-row flex cursor-pointer justify-start"
 				>
-					<img src={"/assets/chat.png"} />
+					<p className="text-base font-medium ml-3">Chat</p>
 				</div>
 			</>
 		);
 	} else {
 		return (
 			<>
-				<div className="fixed bottom-10 right-10 bg-b2 rounded-xl h-500">
+				<div className="rounded-xl h-500 border-2 p-2 border-white bg-dark">
 					<div
 						onClick={() => {
 							setOpened(false);
