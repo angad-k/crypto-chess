@@ -16,10 +16,13 @@ import {
 	MSG_DELIM,
 	splitMessage,
 } from "../utils/utils";
+import { observer } from "mobx-react-lite";
 import { Canvas, useFrame, useThree } from "react-three-fiber";
 import Board from "../game/scene/board";
 import Setup from "../game/scene/setup";
 import { getCoordsFromNotation } from "../game/scene/coordutils";
+import { ethers } from "ethers";
+import BettingPanel from "./BettingPanel";
 const CameraControls = () => {
 	const {
 		camera,
@@ -40,7 +43,9 @@ const url = "ws://localhost:4000";
 let s = new WebSocket(url);
 let onopenCalled = false;
 // const currPos = [];
-const Stream = (props) => {
+const Stream = observer((props) => {
+	const params = useParams();
+	const {user,streamPubkeys,setStreamPubkeys,resetStreamPubkeys} = useContext(Store);
 	const [placeholder, setPlaceholder] = useState(false);
 	const [pos_set, setpos_set] = useState(false);
 	const { chess, setChess, resetChessStore } = useContext(Store);
@@ -59,7 +64,13 @@ const Stream = (props) => {
 	useEffect(() => {
 		return resetChessStore;
 	}, []);
-
+	const {
+		whitePubkey,
+		blackPubkey
+	} = streamPubkeys;
+	useEffect(() => {
+		return resetStreamPubkeys;
+	}, []);
 	const performMove = (from, to, aiDone = false) => {
 		const fromCoordinates = getCoordsFromNotation(from);
 		console.log("fromC = " + fromCoordinates);
@@ -110,8 +121,6 @@ const Stream = (props) => {
 			activeBlocks: [],
 		});
 	};
-
-	const params = useParams();
 
 	function updateBoard(fen) {
 		let currPos = [];
@@ -269,11 +278,19 @@ const Stream = (props) => {
 				break;
 			case "init_game":
 				//set board
-				let [gg, f] = splitMessage(arg);
+				let [gg, extra] = splitMessage(arg);
+				let [f,extra2] = splitMessage(extra);
+				let[white,black] = splitMessage(extra2)
 				if (gg == params.gameCode) {
 					updateBoard(f);
+					console.log(white,black)
+					setStreamPubkeys({
+						white:white,
+						black:black
+					  })
 					console.log(f);
 					console.log(positions);
+					console.log(whitePubkey,blackPubkey)
 				}
 				break;
 			default:
@@ -307,8 +324,9 @@ const Stream = (props) => {
 					/>
 				</group>
 			</Canvas>
+			<BettingPanel blackPubkey={blackPubkey} whitePubkey={whitePubkey} gameCode={params.gameCode}/>
 		</Suspense>
 	);
-};
+});
 
 export default Stream;
