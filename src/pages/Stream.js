@@ -25,6 +25,7 @@ import { ethers } from "ethers";
 import BettingPanel from "./BettingPanel";
 import { webSocketURL } from "../utils/const";
 import Chat from "../components/Chat";
+import ModalSuperChat from "../components/ModalSuperChat";
 const CameraControls = () => {
   const {
     camera,
@@ -46,79 +47,84 @@ let s = new WebSocket(url);
 let onopenCalled = false;
 // const currPos = [];
 const Stream = observer((props) => {
-  const params = useParams();
-  const { user } = useContext(Store);
-  const [placeholder, setPlaceholder] = useState(false);
-  const [pos_set, setpos_set] = useState(false);
-  const { chess, setChess, resetChessStore } = useContext(Store);
-  const { streamPubkeys, setStreamPubkeys, resetStreamPubkeys } =
-    useContext(Store);
-  const {
-    positions,
-    activeBlocks,
-    selectedPiece,
-    blackSideCoord,
-    whiteSideCoord,
-    game,
-    gameEnded,
-    gameStarted,
-    winner,
-    playerColor,
-  } = chess;
-  useEffect(() => {
-    return resetChessStore;
-  }, []);
-  const { whitePubkey, blackPubkey } = streamPubkeys;
-  useEffect(() => {
-    return resetStreamPubkeys;
-  }, []);
-  const performMove = (from, to, aiDone = false) => {
-    const fromCoordinates = getCoordsFromNotation(from);
-    console.log("fromC = " + fromCoordinates);
-    const toCoordinates = getCoordsFromNotation(to);
-    console.log("toC = " + toCoordinates);
-    let newpositions = positions.map((x, i) => {
-      if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
-        console.log("udaya");
-        if (x.side == Colors.WHITE) {
-          x.i = whiteSideCoord[0];
-          x.j = whiteSideCoord[1];
-          x.alive = false;
-          let nws = whiteSideCoord;
-          if (nws[0] == 7) {
-            nws[1] = 9;
-            nws[0] = 0;
-          } else {
-            nws[0]++;
-          }
-          setChess({ whiteSideCoord: nws });
-        } else {
-          x.i = blackSideCoord[0];
-          x.j = blackSideCoord[1];
-          x.alive = false;
-          let bws = blackSideCoord;
-          if (bws[0] == 7) {
-            bws[1] = -2;
-            bws[0] = 0;
-          } else {
-            bws[0]++;
-          }
-          setChess({ blackSideCoord: bws });
-        }
-      } else if (x.i === fromCoordinates[0] && x.j === fromCoordinates[1]) {
-        console.log("hilaya");
-        x.i = toCoordinates[0];
-        x.j = toCoordinates[1];
-      }
-      return x;
-    });
-    console.log(newpositions);
-    setChess({
-      positions: newpositions,
-      selectedPiece: null,
-      activeBlocks: [],
-    });
-  };
+	const [showModal, setShowModal] = useState(false);
+	const handleCloseModal = () => setShowModal(false);
+	const params = useParams();
+	const { user } = useContext(Store);
+	const [placeholder, setPlaceholder] = useState(false);
+	const [pos_set, setpos_set] = useState(false);
+	const { chess, setChess, resetChessStore } = useContext(Store);
+	const { streamPubkeys, setStreamPubkeys, resetStreamPubkeys } =
+		useContext(Store);
+	const {
+		positions,
+		activeBlocks,
+		selectedPiece,
+		blackSideCoord,
+		whiteSideCoord,
+		game,
+		gameEnded,
+		gameStarted,
+		winner,
+		playerColor,
+	} = chess;
+	useEffect(() => {
+		return resetChessStore;
+	}, []);
+	const { whitePubkey, blackPubkey } = streamPubkeys;
+	useEffect(() => {
+		return resetStreamPubkeys;
+	}, []);
+	const performMove = (from, to, aiDone = false) => {
+		const fromCoordinates = getCoordsFromNotation(from);
+		console.log("fromC = " + fromCoordinates);
+		const toCoordinates = getCoordsFromNotation(to);
+		console.log("toC = " + toCoordinates);
+		let newpositions = positions.map((x, i) => {
+			if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
+				console.log("udaya");
+				if (x.side == Colors.WHITE) {
+					x.i = whiteSideCoord[0];
+					x.j = whiteSideCoord[1];
+					x.alive = false;
+					let nws = whiteSideCoord;
+					if (nws[0] == 7) {
+						nws[1] = 9;
+						nws[0] = 0;
+					} else {
+						nws[0]++;
+					}
+					setChess({ whiteSideCoord: nws });
+				} else {
+					x.i = blackSideCoord[0];
+					x.j = blackSideCoord[1];
+					x.alive = false;
+					let bws = blackSideCoord;
+					if (bws[0] == 7) {
+						bws[1] = -2;
+						bws[0] = 0;
+					} else {
+						bws[0]++;
+					}
+					setChess({ blackSideCoord: bws });
+				}
+			} else if (
+				x.i === fromCoordinates[0] &&
+				x.j === fromCoordinates[1]
+			) {
+				console.log("hilaya");
+				x.i = toCoordinates[0];
+				x.j = toCoordinates[1];
+			}
+			return x;
+		});
+		console.log(newpositions);
+		setChess({
+			positions: newpositions,
+			selectedPiece: null,
+			activeBlocks: [],
+		});
+	};
 
   function updateBoard(fen) {
     let currPos = [];
@@ -265,6 +271,7 @@ const Stream = observer((props) => {
 				console.log(true);
 				performMove(from, to);
 				// }*/
+        
         let [gc, fen] = splitMessage(arg);
         if (gc == params.gameCode) {
           updateBoard(fen);
@@ -331,17 +338,23 @@ const Stream = observer((props) => {
       </div>
       <div className="fixed bottom-10 right-10 flex flex-col gap-3 ">
         <Chat
-          pubKey={user.accounts}
-          gameCode={params.gameCode}
-          isBlack={false}
-          isWhite={false}
-        />
+					pubKey={user.accounts}
+					gameCode={params.gameCode}
+					isBlack={false}
+					isWhite={false}
+					setShowModal={setShowModal}
+				/>
         <BettingPanel
           whitePubkey={whitePubkey}
           blackPubkey={blackPubkey}
           gameCode={params.gameCode}
         />
       </div>
+      {showModal ? (
+              <ModalSuperChat closeModal={handleCloseModal} />
+            ) : (
+              <> </>
+            )}
     </>
   );
 });
