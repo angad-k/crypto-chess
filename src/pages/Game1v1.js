@@ -5,21 +5,23 @@ import { useParams } from "react-router-dom";
 import Store from "../utils/Store";
 
 const Game1v1 = (props) => {
-  const params = useParams();
-  const { user } = useContext(Store);
-  console.log(user.accounts);
-  return (
-    <div className="bg-dark h-screen overflow-auto">
-      <TopNav />
-      <div className="h-screen">
-        {props.type === "Create" ? (
-          <Chess pubKey={user.accounts} gameCode={params.gameCode} isHost />
-        ) : (
-          <Chess pubKey={user.accounts} gameCode={params.gameCode} />
-        )}
-      </div>
-    </div>
-  );
+	const params = useParams();
+	const { user } = useContext(Store);
+	return (
+		<div className="bg-dark h-screen overflow-auto">
+			<div className="h-screen">
+				{props.type === "Create" ? (
+					<Chess
+						pubKey={user.accounts}
+						gameCode={params.gameCode}
+						isHost
+					/>
+				) : (
+					<Chess pubKey={user.accounts} gameCode={params.gameCode} />
+				)}
+			</div>
+		</div>
+	);
 };
 
 export default Game1v1;
