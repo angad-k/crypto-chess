@@ -96,13 +96,13 @@ const BettingPanel = observer((props) => {
           </div>
           <div className="flex flex-row content-center items-center justify-center gap-5 p-1 mt-3 mb-2">
             <button
-              className="bg-black text-white mt-0.5 font-medium appearance-none rounded-xl opacity-80 leading-tight focus:outline-none w-1/2 h-20"
+              className="bg-black text-white mt-0.5 font-medium appearance-none rounded-xl opacity-80 leading-tight focus:outline-none w-1/2 h-30"
               onClick={handleBidBlack}
             >
               Bid Black
             </button>
             <button
-              className="bg-white mt-0.5 text-black font-medium appearance-none rounded-xl opacity-80 leading-tight focus:outline-none w-1/2 h-20"
+              className="bg-white mt-0.5 text-black font-medium appearance-none rounded-xl opacity-80 leading-tight focus:outline-none w-1/2 h-30"
               onClick={handleBidWhite}
             >
               Bid White
