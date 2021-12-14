@@ -16,8 +16,8 @@ const initialChessStore = {
   playerColor: null,
 };
 const initialStreamPubkeys = {
-  white:null,
-  black:null
+  whitePubkey:null,
+  blackPubkey:null
 };
 class Store {
   constructor() {

@@ -15,11 +15,13 @@ const BettingPanel = observer((props) => {
   const inputRef = useRef();
   const {user} = useContext(Store);
   const handleBidWhite = async() => {
-    var res=await user.signedContract.bet(props.whitePubkey,props.gameCode,{value:ethers.utils.parseEther(inputRef.current.value)})
+    console.log(props.whitePubkey,props.gameCode)
+    var res=await user.signedContract.bet(props.whitePubkey,parseInt(props.gameCode),{value:ethers.utils.parseEther(inputRef.current.value)})
     console.log(res)
   };
   const handleBidBlack = async() => {
-    var res=await user.signedContract.bet(props.blackPubkey,props.gameCode,{value:ethers.utils.parseEther(inputRef.current.value)})
+    console.log(props.blackPubkey,props.gameCode)
+    var res=await user.signedContract.bet(props.blackPubkey,parseInt(props.gameCode),{value:ethers.utils.parseEther(inputRef.current.value)})
     console.log(res)
   };
 
