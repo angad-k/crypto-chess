@@ -69,7 +69,6 @@ contract Chess {
         );
         GameInfo[game].winner = payable(winner);
         GameInfo[game].winner.transfer(2 * (GameInfo[game].amountBet));
-        settleBet(game, winner);
         GameInfo[game].finished = true;
     }
 
@@ -125,20 +124,25 @@ contract Chess {
         BetInfo[game].betters.push(user);
     }
 
-    function settleBet(uint256 game, address winner) private {
+    function settleBet(uint256 game, address winner) public payable {
         uint256 transfer;
         uint256 winAmount;
         uint256 loseAmount;
-        Better[] memory winners;
-        uint256 count = 0;
-        address winnerSide = winner;
+        uint256 winnerCount = 0;
         for (uint256 i = 0; i < BetInfo[game].betters.length; i++) {
-            if (BetInfo[game].betters[i].betSide == winnerSide) {
+            if (BetInfo[game].betters[i].betSide == winner) {
+                winnerCount++;
+            }
+        }
+        Better[] memory winners = new Better[](winnerCount);
+        uint256 count = 0;
+        for (uint256 i = 0; i < BetInfo[game].betters.length; i++) {
+            if (BetInfo[game].betters[i].betSide == winner) {
                 winners[count] = BetInfo[game].betters[i];
                 count++;
             }
         }
-        if (winnerSide == GameInfo[game].player1) {
+        if (winner == GameInfo[game].player1) {
             winAmount = BetInfo[game].amountPlayer1;
             loseAmount = BetInfo[game].amountPlayer2;
         } else {
