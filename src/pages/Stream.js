@@ -1,4 +1,6 @@
 import TopNav from "../components/TopNav";
+import PlayerLeft from "../components/PlayerLeft";
+import PlayerRight from "../components/PlayerRight";
 import Chess from "../game/scene/main_scene";
 import React, {
   Suspense,
@@ -308,6 +310,9 @@ const Stream = observer((props) => {
   return (
     <>
       <div className="bg-dark h-screen overflow-auto">
+		  <TopNav />
+		  <PlayerLeft pubKey={whitePubkey}/>
+		  <PlayerRight pubKey={blackPubkey}/>
         <div className="h-screen">
           <Suspense fallback={<></>}>
             <Canvas
@@ -351,7 +356,7 @@ const Stream = observer((props) => {
         />
       </div>
       {showModal ? (
-              <ModalSuperChat closeModal={handleCloseModal} />
+              <ModalSuperChat closeModal={handleCloseModal} whitePubkey={whitePubkey} blackPubkey={blackPubkey}/>
             ) : (
               <> </>
             )}
