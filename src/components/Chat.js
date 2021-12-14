@@ -69,9 +69,9 @@ const Chat = (props) => {
 					onClick={() => {
 						setOpened(true);
 					}}
-					className="fixed bottom-10 right-10 bg-b2  p-3 text-white rounded-full flex-row flex cursor-pointer justify-center"
+					className="fixed bottom-10 right-10 bg-b2  p-5 text-white rounded-full flex-row flex cursor-pointer justify-center"
 				>
-					<p className=" text-sm font-medium">Chat</p>
+					<img src={"/assets/chat.png"} />
 				</div>
 			</>
 		);
