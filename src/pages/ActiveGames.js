@@ -6,7 +6,9 @@ const ActiveGames = ({ p1, p2, bidOnp1, bidOnp2, game_code }) => {
 	const p2Avatar = get_avatar_url(p2);
 
 	const navigate = useNavigate();
-	const redirect = () => navigate(`/stream/${game_code}`);
+	const redirect = () => {
+		window.location.replace(`/stream/${game_code}`);
+	};
 
 	return (
 		<div

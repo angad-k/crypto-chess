@@ -221,21 +221,25 @@ const Chat = (props) => {
 						>
 							{">"}
 						</span>
-						<span
-							className="p-1 pl-2.5 pr-2.5 mt-0.5 bg-primary text-white rounded cursor-pointer"
-							onClick={() => {
-								props.setShowModal(true);
-							}}
-						>
-							<img
-								src="/assets/thunderbolt.png"
-								style={{
-									height: "25px",
-									width: "25px",
-									filter: "invert()",
+						{props.isWhite || props.isBlack ? (
+							<></>
+						) : (
+							<span
+								className="p-1 pl-2.5 pr-2.5 mt-0.5 bg-primary text-white rounded cursor-pointer"
+								onClick={() => {
+									props.setShowModal(true);
 								}}
-							/>
-						</span>
+							>
+								<img
+									src="/assets/thunderbolt.png"
+									style={{
+										height: "25px",
+										width: "25px",
+										filter: "invert()",
+									}}
+								/>
+							</span>
+						)}
 					</div>
 				</div>
 			</>
