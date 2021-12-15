@@ -47,84 +47,250 @@ let s = new WebSocket(url);
 let onopenCalled = false;
 // const currPos = [];
 const Stream = observer((props) => {
-	const [showModal, setShowModal] = useState(false);
-	const handleCloseModal = () => setShowModal(false);
-	const params = useParams();
-	const { user } = useContext(Store);
-	const [placeholder, setPlaceholder] = useState(false);
-	const [pos_set, setpos_set] = useState(false);
-	const { chess, setChess, resetChessStore } = useContext(Store);
-	const { streamPubkeys, setStreamPubkeys, resetStreamPubkeys } =
-		useContext(Store);
-	const {
-		positions,
-		activeBlocks,
-		selectedPiece,
-		blackSideCoord,
-		whiteSideCoord,
-		game,
-		gameEnded,
-		gameStarted,
-		winner,
-		playerColor,
-	} = chess;
-	useEffect(() => {
-		return resetChessStore;
-	}, []);
-	const { whitePubkey, blackPubkey } = streamPubkeys;
-	useEffect(() => {
-		return resetStreamPubkeys;
-	}, []);
-	const performMove = (from, to, aiDone = false) => {
-		const fromCoordinates = getCoordsFromNotation(from);
-		console.log("fromC = " + fromCoordinates);
-		const toCoordinates = getCoordsFromNotation(to);
-		console.log("toC = " + toCoordinates);
-		let newpositions = positions.map((x, i) => {
-			if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
-				console.log("udaya");
-				if (x.side == Colors.WHITE) {
-					x.i = whiteSideCoord[0];
-					x.j = whiteSideCoord[1];
-					x.alive = false;
-					let nws = whiteSideCoord;
-					if (nws[0] == 7) {
-						nws[1] = 9;
-						nws[0] = 0;
-					} else {
-						nws[0]++;
-					}
-					setChess({ whiteSideCoord: nws });
-				} else {
-					x.i = blackSideCoord[0];
-					x.j = blackSideCoord[1];
-					x.alive = false;
-					let bws = blackSideCoord;
-					if (bws[0] == 7) {
-						bws[1] = -2;
-						bws[0] = 0;
-					} else {
-						bws[0]++;
-					}
-					setChess({ blackSideCoord: bws });
-				}
-			} else if (
-				x.i === fromCoordinates[0] &&
-				x.j === fromCoordinates[1]
-			) {
-				console.log("hilaya");
-				x.i = toCoordinates[0];
-				x.j = toCoordinates[1];
-			}
-			return x;
-		});
-		console.log(newpositions);
-		setChess({
-			positions: newpositions,
-			selectedPiece: null,
-			activeBlocks: [],
-		});
-	};
+  const [showModal, setShowModal] = useState(false);
+  const handleCloseModal = () => setShowModal(false);
+  const params = useParams();
+  const { user } = useContext(Store);
+  const [placeholder, setPlaceholder] = useState(false);
+  const [pos_set, setpos_set] = useState(false);
+  const { chess, setChess, resetChessStore } = useContext(Store);
+  const { streamPubkeys, setStreamPubkeys, resetStreamPubkeys } =
+    useContext(Store);
+  const {
+    positions,
+    activeBlocks,
+    selectedPiece,
+    blackSideCoord,
+    whiteSideCoord,
+    game,
+    gameEnded,
+    gameStarted,
+    winner,
+    playerColor,
+  } = chess;
+  useEffect(() => {
+    return resetChessStore;
+  }, []);
+  const { whitePubkey, blackPubkey } = streamPubkeys;
+  useEffect(() => {
+    return resetStreamPubkeys;
+  }, []);
+  const performMove = (from, to, aiDone = false) => {
+    const fromCoordinates = getCoordsFromNotation(from);
+    console.log("fromC = " + fromCoordinates);
+    const toCoordinates = getCoordsFromNotation(to);
+    console.log("toC = " + toCoordinates);
+    let newpositions = positions.map((x, i) => {
+      if (x.i == toCoordinates[0] && x.j == toCoordinates[1]) {
+        console.log("udaya");
+        if (x.side == Colors.WHITE) {
+          x.i = whiteSideCoord[0];
+          x.j = whiteSideCoord[1];
+          x.alive = false;
+          let nws = whiteSideCoord;
+          if (nws[0] == 7) {
+            nws[1] = 9;
+            nws[0] = 0;
+          } else {
+            nws[0]++;
+          }
+          setChess({ whiteSideCoord: nws });
+        } else {
+          x.i = blackSideCoord[0];
+          x.j = blackSideCoord[1];
+          x.alive = false;
+          let bws = blackSideCoord;
+          if (bws[0] == 7) {
+            bws[1] = -2;
+            bws[0] = 0;
+          } else {
+            bws[0]++;
+          }
+          setChess({ blackSideCoord: bws });
+        }
+      } else if (
+        x.i === fromCoordinates[0] &&
+        x.j === fromCoordinates[1]
+      ) {
+        console.log("hilaya");
+        x.i = toCoordinates[0];
+        x.j = toCoordinates[1];
+      }
+      return x;
+    });
+    console.log(newpositions);
+    setChess({
+      positions: newpositions,
+      selectedPiece: null,
+      activeBlocks: [],
+    });
+  };
+
+  function farSpawn(currPos) {
+    let blackPawn = 0;
+    let whitePawn = 0;
+    let blackRook = 0;
+    let whiteRook = 0;
+    let blackBishop = 0;
+    let whiteBishop = 0;
+    let blackKnight = 0;
+    let whiteKnight = 0;
+    let blackQueen = 0;
+    let whiteQueen = 0;
+    let blackKing = 0;
+    let whiteKing = 0;
+    let ind = 0;
+
+    while (ind < currPos.length) {
+      if (currPos[ind].model == Models.PAWN && currPos[ind].side == Colors.BLACK) {
+        blackPawn++;
+      }
+      if (currPos[ind].model == Models.PAWN && currPos[ind].side == Colors.WHITE) {
+        whitePawn++;
+      }
+      if (currPos[ind].model == Models.ROOK && currPos[ind].side == Colors.BLACK) {
+        blackRook++;
+      }
+      if (currPos[ind].model == Models.ROOK && currPos[ind].side == Colors.WHITE) {
+        whiteRook++;
+      }
+      if (currPos[ind].model == Models.BISHOP && currPos[ind].side == Colors.BLACK) {
+        blackBishop++;
+      }
+      if (currPos[ind].model == Models.BISHOP && currPos[ind].side == Colors.WHITE) {
+        whiteBishop++;
+      }
+      if (currPos[ind].model == Models.KNIGHT && currPos[ind].side == Colors.BLACK) {
+        blackKnight++;
+      }
+      if (currPos[ind].model == Models.KNIGHT && currPos[ind].side == Colors.WHITE) {
+        whiteKnight++;
+      }
+      if (currPos[ind].model == Models.QUEEN && currPos[ind].side == Colors.BLACK) {
+        blackQueen++;
+      }
+      if (currPos[ind].model == Models.QUEEN && currPos[ind].side == Colors.WHITE) {
+        whiteQueen++;
+      }
+      if (currPos[ind].model == Models.KING && currPos[ind].side == Colors.BLACK) {
+        blackKing++;
+      }
+      if (currPos[ind].model == Models.KING && currPos[ind].side == Colors.WHITE) {
+        whiteKing++;
+      }
+
+      ind++;
+    }
+
+    for (let k = 0; k < (8 - blackPawn); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.PAWN,
+        side: Colors.BLACK,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (8 - whitePawn); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.PAWN,
+        side: Colors.WHITE,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (2 - blackRook); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.ROOK,
+        side: Colors.BLACK,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (2 - whiteRook); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.ROOK,
+        side: Colors.WHITE,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (2 - blackBishop); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.BISHOP,
+        side: Colors.BLACK,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (2 - whiteBishop); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.BISHOP,
+        side: Colors.WHITE,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (2 - blackKnight); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.KNIGHT,
+        side: Colors.BLACK,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (2 - whiteKnight); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.KNIGHT,
+        side: Colors.WHITE,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (1 - blackQueen); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.QUEEN,
+        side: Colors.BLACK,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (1 - whiteQueen); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.QUEEN,
+        side: Colors.KING,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (1 - blackKing); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.KING,
+        side: Colors.BLACK,
+        alive: false,
+      })
+    }
+    for (let k = 0; k < (1 - whiteKing); k++) {
+      currPos.push({
+        i: 200,
+        j: 200,
+        model: Models.KING,
+        side: Colors.WHITE,
+        alive: false,
+      })
+    }
+  }
 
   function updateBoard(fen) {
     let currPos = [];
@@ -261,17 +427,17 @@ const Stream = observer((props) => {
     switch (cmd) {
       case "stream":
         /*
-				let [gameCode, move] = splitMessage(arg);
-				console.log(gameCode + ":" + move);
-				// if (params.gameCode == gameCode) {
-				let [from, to] = splitMessage(move);
-				console.log(
-					"gamecode = " + gameCode + " from = " + from + " to = " + to
-				);
-				console.log(true);
-				performMove(from, to);
-				// }*/
-        
+        let [gameCode, move] = splitMessage(arg);
+        console.log(gameCode + ":" + move);
+        // if (params.gameCode == gameCode) {
+        let [from, to] = splitMessage(move);
+        console.log(
+          "gamecode = " + gameCode + " from = " + from + " to = " + to
+        );
+        console.log(true);
+        performMove(from, to);
+        // }*/
+
         let [gc, fen] = splitMessage(arg);
         if (gc == params.gameCode) {
           updateBoard(fen);
@@ -323,12 +489,12 @@ const Stream = observer((props) => {
                 <pointLight position={[-4.5, 4.5, 20]} />
                 <Board
                   active={[]}
-                  handleBlockClick={() => {}}
+                  handleBlockClick={() => { }}
                   playerColor={0}
                 />
                 <Setup
                   positions={pos_set ? positions : []}
-                  handlePieceClick={() => {}}
+                  handlePieceClick={() => { }}
                   playerColor={playerColor}
                 />
               </group>
@@ -338,12 +504,12 @@ const Stream = observer((props) => {
       </div>
       <div className="fixed bottom-10 right-10 flex flex-col gap-3 ">
         <Chat
-					pubKey={user.accounts}
-					gameCode={params.gameCode}
-					isBlack={false}
-					isWhite={false}
-					setShowModal={setShowModal}
-				/>
+          pubKey={user.accounts}
+          gameCode={params.gameCode}
+          isBlack={false}
+          isWhite={false}
+          setShowModal={setShowModal}
+        />
         <BettingPanel
           whitePubkey={whitePubkey}
           blackPubkey={blackPubkey}
@@ -351,10 +517,10 @@ const Stream = observer((props) => {
         />
       </div>
       {showModal ? (
-              <ModalSuperChat closeModal={handleCloseModal} />
-            ) : (
-              <> </>
-            )}
+        <ModalSuperChat closeModal={handleCloseModal} />
+      ) : (
+        <> </>
+      )}
     </>
   );
 });
