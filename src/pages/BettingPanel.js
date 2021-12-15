@@ -92,6 +92,7 @@ const BettingPanel = observer((props) => {
               type="text"
               className="bg-b2 mt-0.5 appearance-none text-white rounded-xl py-2 px-4 opacity-80 leading-tight focus:outline-none w-400"
               placeholder="Enter Bid Amount"
+              ref={inputRef}
             />
           </div>
           <div className="flex flex-row content-center items-center justify-center gap-5 p-1 mt-3 mb-2">
