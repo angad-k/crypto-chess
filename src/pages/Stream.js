@@ -1,4 +1,6 @@
 import TopNav from "../components/TopNav";
+import PlayerLeft from "../components/PlayerLeft";
+import PlayerRight from "../components/PlayerRight";
 import Chess from "../game/scene/main_scene";
 import React, {
 	Suspense,
@@ -272,92 +274,95 @@ const Stream = observer((props) => {
 				console.log(true);
 				performMove(from, to);
 				// }*/
-
-				let [gc, fen] = splitMessage(arg);
-				if (gc == params.gameCode) {
-					updateBoard(fen);
-					console.log(fen);
-					console.log(positions);
-					console.log("message aya");
-					//window.location.reload();
-				}
-				break;
-			case "init_game":
-				//set board
-				let [gg, extra] = splitMessage(arg);
-				let [f, extra2] = splitMessage(extra);
-				let [white, black] = splitMessage(extra2);
-				if (gg == params.gameCode) {
-					updateBoard(f);
-					console.log(white, black);
-					setStreamPubkeys({
-						whitePubkey: white,
-						blackPubkey: black,
-					});
-					console.log(f);
-					console.log(positions);
-					console.log(whitePubkey, blackPubkey);
-				}
-				break;
-			default:
-		}
-	};
-	console.log("rendered");
-	console.log("positions = ");
-	console.log(positions);
-	console.log(whitePubkey, blackPubkey);
-	return (
-		<>
-			<div className="bg-dark h-screen overflow-auto">
-				<div className="h-screen">
-					<Suspense fallback={<></>}>
-						<Canvas
-							gl={{ antialias: true }}
-							dpr={Math.max(window.devicePixelRatio, 2)}
-						>
-							<CameraControls />
-							<group>
-								<ambientLight />
-								<pointLight position={[4.5, 4.5, 20]} />
-								<pointLight position={[-4.5, -4.5, 20]} />
-								<pointLight position={[4.5, -4.5, 20]} />
-								<pointLight position={[-4.5, 4.5, 20]} />
-								<Board
-									active={[]}
-									handleBlockClick={() => {}}
-									playerColor={0}
-								/>
-								<Setup
-									positions={pos_set ? positions : []}
-									handlePieceClick={() => {}}
-									playerColor={playerColor}
-								/>
-							</group>
-						</Canvas>
-					</Suspense>
-				</div>
-			</div>
-			<div className="fixed bottom-10 right-10 flex flex-col gap-3 ">
-				<Chat
+        let [gc, fen] = splitMessage(arg);
+        if (gc == params.gameCode) {
+          updateBoard(fen);
+          console.log(fen);
+          console.log(positions);
+          console.log("message aya");
+          //window.location.reload();
+        }
+        break;
+      case "init_game":
+        //set board
+        let [gg, extra] = splitMessage(arg);
+        let [f, extra2] = splitMessage(extra);
+        let [white, black] = splitMessage(extra2);
+        if (gg == params.gameCode) {
+          updateBoard(f);
+          console.log(white, black);
+          setStreamPubkeys({
+            whitePubkey: white,
+            blackPubkey: black,
+          });
+          console.log(f);
+          console.log(positions);
+          console.log(whitePubkey, blackPubkey);
+        }
+        break;
+      default:
+    }
+  };
+  console.log("rendered");
+  console.log("positions = ");
+  console.log(positions);
+  console.log(whitePubkey, blackPubkey);
+  return (
+    <>
+      <div className="bg-dark h-screen overflow-auto">
+		  <TopNav />
+		  <PlayerLeft pubKey={whitePubkey}/>
+		  <PlayerRight pubKey={blackPubkey}/>
+        <div className="h-screen">
+          <Suspense fallback={<></>}>
+            <Canvas
+              gl={{ antialias: true }}
+              dpr={Math.max(window.devicePixelRatio, 2)}
+            >
+              <CameraControls />
+              <group>
+                <ambientLight />
+                <pointLight position={[4.5, 4.5, 20]} />
+                <pointLight position={[-4.5, -4.5, 20]} />
+                <pointLight position={[4.5, -4.5, 20]} />
+                <pointLight position={[-4.5, 4.5, 20]} />
+                <Board
+                  active={[]}
+                  handleBlockClick={() => {}}
+                  playerColor={0}
+                />
+                <Setup
+                  positions={pos_set ? positions : []}
+                  handlePieceClick={() => {}}
+                  playerColor={playerColor}
+                />
+              </group>
+            </Canvas>
+          </Suspense>
+        </div>
+      </div>
+      <div className="fixed bottom-10 right-10 flex flex-col gap-3 ">
+        <Chat
 					pubKey={user.accounts}
 					gameCode={params.gameCode}
 					isBlack={false}
 					isWhite={false}
 					setShowModal={setShowModal}
 				/>
-				<BettingPanel
-					whitePubkey={whitePubkey}
-					blackPubkey={blackPubkey}
-					gameCode={params.gameCode}
-				/>
-			</div>
-			{showModal ? (
-				<ModalSuperChat closeModal={handleCloseModal} />
-			) : (
-				<> </>
-			)}
-		</>
-	);
+        <BettingPanel
+          whitePubkey={whitePubkey}
+          blackPubkey={blackPubkey}
+          gameCode={params.gameCode}
+        />
+      </div>
+      {showModal ? (
+              <ModalSuperChat closeModal={handleCloseModal} whitePubkey={whitePubkey} blackPubkey={blackPubkey}/>
+            ) : (
+              <> </>
+            )}
+    </>
+  );
+
 });
 
 export default Stream;
