@@ -6,6 +6,7 @@
 - Demo link : https://youtu.be/yew42WeQ9-g
 - Uses React Three Fiber (an abstraction of ThreeJS for React) to render the 3D scenes.
 - Was a [submission](https://devfolio.co/submissions/dachess-e961) for the Buidlit hackathon by Polygon.
+- Connect to Mumbai testnet to play
 # Screenshots
 
 ![499c99e1-f71c-4483-b93a-c7e855128009](https://user-images.githubusercontent.com/54415525/149655587-431fca6d-8eb7-4ab9-8706-5df5002acc0a.jpg)
